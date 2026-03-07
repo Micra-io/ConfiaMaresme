@@ -119,6 +119,12 @@ const TradesmanProfile = () => {
               <h1 className="font-display text-3xl font-bold">{tradesman.full_name}</h1>
               <p className="mt-1 text-lg font-medium text-secondary">
                 {t(`categories.${tradesman.trade_category}`)}
+                {(tradesman as any).additional_categories?.length > 0 && (
+                  <span className="text-muted-foreground font-normal">
+                    {' · '}
+                    {(tradesman as any).additional_categories.map((c: string) => t(`categories.${c}`)).join(', ')}
+                  </span>
+                )}
               </p>
 
               {tradesman.location && (
@@ -148,6 +154,15 @@ const TradesmanProfile = () => {
               </div>
             </div>
           </div>
+
+          {(tradesman as any).languages?.length > 0 && (
+            <div className="mt-6 flex flex-wrap items-center gap-2">
+              <span className="text-sm font-medium text-muted-foreground">{t('profile.languages')}:</span>
+              {(tradesman as any).languages.map((lang: string) => (
+                <Badge key={lang} variant="outline">{t(`languages.${lang}`, lang)}</Badge>
+              ))}
+            </div>
+          )}
 
           {tradesman.bio && (
             <div className="mt-8">

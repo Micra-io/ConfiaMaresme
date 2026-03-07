@@ -12,6 +12,8 @@ interface TradesmanCardProps {
     id: string;
     full_name: string;
     trade_category: string;
+    additional_categories?: string[];
+    languages?: string[];
     location: string | null;
     bio: string | null;
     profile_image_url: string | null;
@@ -49,6 +51,12 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
                 </h3>
                 <p className="text-sm font-medium text-secondary">
                   {t(`categories.${tradesman.trade_category}`)}
+                  {tradesman.additional_categories?.length > 0 && (
+                    <span className="text-muted-foreground font-normal">
+                      {' · '}{tradesman.additional_categories.slice(0, 2).map((c: string) => t(`categories.${c}`)).join(', ')}
+                      {tradesman.additional_categories.length > 2 && ` +${tradesman.additional_categories.length - 2}`}
+                    </span>
+                  )}
                 </p>
               </div>
             </div>

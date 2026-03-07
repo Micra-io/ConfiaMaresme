@@ -17,3 +17,18 @@ export type TradeCategory = typeof TRADE_CATEGORIES[number]['value'];
 
 export const getCategoryLabel = (value: string) => 
   TRADE_CATEGORIES.find(c => c.value === value)?.label ?? value;
+
+export const LANGUAGES = [
+  { value: 'es', label: 'Español' },
+  { value: 'ca', label: 'Català' },
+  { value: 'en', label: 'English' },
+  { value: 'ru', label: 'Русский' },
+  { value: 'fr', label: 'Français' },
+  { value: 'de', label: 'Deutsch' },
+  { value: 'ar', label: 'العربية' },
+  { value: 'zh', label: '中文' },
+  { value: 'pt', label: 'Português' },
+  { value: 'it', label: 'Italiano' },
+  { value: 'ro', label: 'Română' },
+  { value: 'uk', label: 'Українська' },
+] as const;

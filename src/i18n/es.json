@@ -44,7 +44,23 @@
     "services": "Servicios",
     "contactProtected": "La información de contacto está protegida para los miembros de la comunidad.",
     "contactWhatsApp": "Contactar por WhatsApp",
-    "reviews": "Opiniones de vecinos"
+    "reviews": "Opiniones de vecinos",
+    "languages": "Idiomas",
+    "alsoDoesTitle": "También trabaja en"
+  },
+  "languages": {
+    "es": "Español",
+    "ca": "Català",
+    "en": "English",
+    "ru": "Русский",
+    "fr": "Français",
+    "de": "Deutsch",
+    "ar": "العربية",
+    "zh": "中文",
+    "pt": "Português",
+    "it": "Italiano",
+    "ro": "Română",
+    "uk": "Українська"
   },
   "unlock": {
     "title": "Comunidad protegida",
@@ -117,6 +133,10 @@
     "services": "Servicios",
     "servicePlaceholder": "Ej: Instalación eléctrica",
     "addService": "Añadir",
+    "additionalTrades": "Oficios adicionales",
+    "additionalTradesDesc": "Selecciona otros oficios que también dominas",
+    "languages": "Idiomas",
+    "languagesDesc": "Selecciona los idiomas que hablas",
     "availableForWork": "Disponible para trabajos",
     "availableDesc": "Muestra que estás aceptando nuevos clientes",
     "saving": "Guardando...",
