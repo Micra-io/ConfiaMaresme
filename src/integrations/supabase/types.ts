@@ -73,6 +73,7 @@ export type Database = {
           is_available: boolean
           is_claimed: boolean
           location: string | null
+          phone_verified: boolean
           profile_image_url: string | null
           services: string[] | null
           trade_category: Database["public"]["Enums"]["trade_category"]
@@ -89,6 +90,7 @@ export type Database = {
           is_available?: boolean
           is_claimed?: boolean
           location?: string | null
+          phone_verified?: boolean
           profile_image_url?: string | null
           services?: string[] | null
           trade_category?: Database["public"]["Enums"]["trade_category"]
@@ -105,6 +107,7 @@ export type Database = {
           is_available?: boolean
           is_claimed?: boolean
           location?: string | null
+          phone_verified?: boolean
           profile_image_url?: string | null
           services?: string[] | null
           trade_category?: Database["public"]["Enums"]["trade_category"]
@@ -120,6 +123,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_tradesman_profile: {
+        Args: { _phone: string; _user_id: string }
+        Returns: string
+      }
       is_tradesman_owner: { Args: { _tradesman_id: string }; Returns: boolean }
     }
     Enums: {

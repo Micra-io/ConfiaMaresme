@@ -2,6 +2,7 @@
   "nav": {
     "directory": "Directory",
     "myProfile": "My Profile",
+    "myDashboard": "My Dashboard",
     "signOut": "Sign Out",
     "signIn": "Sign In"
   },
@@ -72,7 +73,31 @@
     "noAccount": "Don't have an account? Register",
     "haveAccount": "Already have an account? Sign in",
     "welcome": "Welcome!",
-    "accountCreated": "Account created. Check your email to confirm."
+    "accountCreated": "Account created. Check your email to confirm.",
+    "continueWithGoogle": "Continue with Google",
+    "orWithEmail": "or with email",
+    "selectRole": "How do you want to use ConfiaMaresme?",
+    "selectRoleDesc": "Choose your profile to personalize your experience.",
+    "roleResident": "Resident",
+    "roleResidentDesc": "I'm looking for trusted professionals for my home",
+    "roleTradesman": "Tradesman",
+    "roleTradesmanDesc": "I want to offer my services to the community"
+  },
+  "claim": {
+    "title": "Claim your profile",
+    "desc": "If you're already listed in the directory, enter your phone number to claim your profile.",
+    "phoneLabel": "Phone number",
+    "verify": "Verify",
+    "claimTitle": "Create account and claim",
+    "claimingAs": "Claiming profile of {{name}}",
+    "claimAndCreate": "Create account and claim profile",
+    "success": "Profile claimed successfully!",
+    "successTitle": "Profile claimed!",
+    "successDesc": "Your professional profile has been linked to your account. You can now manage it from your dashboard.",
+    "goToDashboard": "Go to my dashboard",
+    "notFoundTitle": "Profile not found",
+    "notFoundDesc": "No unclaimed profile was found with that phone number.",
+    "tryAgain": "Try again"
   },
   "dashboard": {
     "title": "My Professional Profile",
