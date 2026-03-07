@@ -4,9 +4,11 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowLeft, MapPin, MessageCircle, ShieldCheck, User, Phone } from 'lucide-react';
+import { ArrowLeft, MapPin, MessageCircle, ShieldCheck, User, Phone, Lock } from 'lucide-react';
 import { getCategoryLabel } from '@/lib/constants';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useUnlockContact } from '@/hooks/useUnlockContact';
+import UnlockContactModal from '@/components/UnlockContactModal';
 
 const TradesmanProfile = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,6 +26,9 @@ const TradesmanProfile = () => {
     },
     enabled: !!id,
   });
+
+  const { isUnlocked, isUnlocking, handleUnlock, showAuthModal, setShowAuthModal } =
+    useUnlockContact(id || '');
 
   if (isLoading) {
     return (
@@ -104,30 +109,52 @@ const TradesmanProfile = () => {
             <div className="mt-8">
               <h2 className="font-display text-xl font-semibold">Servicios</h2>
               <div className="mt-3 flex flex-wrap gap-2">
-                {tradesman.services.map((s, i) => (
+                {tradesman.services.map((s: string, i: number) => (
                   <Badge key={i} variant="secondary">{s}</Badge>
                 ))}
               </div>
             </div>
           )}
 
-          {whatsappLink && (
-            <div className="mt-8">
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="gap-2 bg-success text-success-foreground hover:bg-success/90">
-                  <MessageCircle className="h-5 w-5" /> Contactar por WhatsApp
+          {/* Gated contact section */}
+          <div className="mt-8">
+            {isUnlocked ? (
+              <div className="space-y-3">
+                {whatsappLink && (
+                  <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+                    <Button size="lg" className="gap-2 bg-success text-success-foreground hover:bg-success/90">
+                      <MessageCircle className="h-5 w-5" /> Contactar por WhatsApp
+                    </Button>
+                  </a>
+                )}
+                {tradesman.whatsapp_number && (
+                  <div className="mt-3 flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <Phone className="h-3.5 w-3.5" /> {tradesman.whatsapp_number}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="rounded-lg border-2 border-dashed border-primary/20 bg-primary/5 p-6 text-center">
+                <Lock className="mx-auto mb-2 h-8 w-8 text-primary/60" />
+                <p className="mb-3 text-sm text-muted-foreground">
+                  La información de contacto está protegida para los miembros de la comunidad.
+                </p>
+                <Button
+                  size="lg"
+                  className="gap-2"
+                  onClick={handleUnlock}
+                  disabled={isUnlocking}
+                >
+                  <Lock className="h-4 w-4" />
+                  {isUnlocking ? 'Desbloqueando...' : 'Desbloquear contacto'}
                 </Button>
-              </a>
-            </div>
-          )}
-
-          {tradesman.whatsapp_number && (
-            <div className="mt-3 flex items-center gap-1.5 text-sm text-muted-foreground">
-              <Phone className="h-3.5 w-3.5" /> {tradesman.whatsapp_number}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
         </CardContent>
       </Card>
+
+      <UnlockContactModal open={showAuthModal} onOpenChange={setShowAuthModal} />
     </div>
   );
 };

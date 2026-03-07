@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -7,11 +7,15 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { toast } from 'sonner';
+import { ShieldCheck, Users } from 'lucide-react';
 
 const Auth = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(true);
+  const [searchParams] = useSearchParams();
+  const isResidentFlow = searchParams.get('role') === 'resident';
+
+  const [isLogin, setIsLogin] = useState(!isResidentFlow);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -51,15 +55,38 @@ const Auth = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="font-display text-2xl">
-            {isLogin ? 'Iniciar sesión' : 'Crear cuenta'}
+            {isResidentFlow && !isLogin
+              ? 'Registro de vecino'
+              : isLogin
+                ? 'Iniciar sesión'
+                : 'Crear cuenta'}
           </CardTitle>
           <CardDescription>
-            {isLogin
-              ? 'Accede a tu panel de profesional'
-              : 'Regístrate para reclamar tu perfil'}
+            {isResidentFlow && !isLogin
+              ? 'Únete a la comunidad del Maresme para contactar profesionales de confianza.'
+              : isLogin
+                ? 'Accede a tu cuenta'
+                : 'Regístrate para formar parte de la comunidad'}
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {isResidentFlow && !isLogin && (
+            <div className="mb-6 space-y-2">
+              <div className="flex items-start gap-3 rounded-lg border bg-muted/50 p-3">
+                <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />
+                <p className="text-sm text-muted-foreground">
+                  Tu registro ayuda a proteger a los profesionales del spam
+                </p>
+              </div>
+              <div className="flex items-start gap-3 rounded-lg border bg-muted/50 p-3">
+                <Users className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />
+                <p className="text-sm text-muted-foreground">
+                  Accede a contacto directo con profesionales verificados
+                </p>
+              </div>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>

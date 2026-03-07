@@ -14,6 +14,56 @@ export type Database = {
   }
   public: {
     Tables: {
+      leads: {
+        Row: {
+          created_at: string
+          id: string
+          resident_id: string
+          tradesman_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          resident_id: string
+          tradesman_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          resident_id?: string
+          tradesman_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_tradesman_id_fkey"
+            columns: ["tradesman_id"]
+            isOneToOne: false
+            referencedRelation: "tradesmen"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          user_role: Database["public"]["Enums"]["user_role"]
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id: string
+          user_role?: Database["public"]["Enums"]["user_role"]
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          user_role?: Database["public"]["Enums"]["user_role"]
+        }
+        Relationships: []
+      }
       tradesmen: {
         Row: {
           bio: string | null
@@ -70,7 +120,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_tradesman_owner: { Args: { _tradesman_id: string }; Returns: boolean }
     }
     Enums: {
       trade_category:
@@ -86,6 +136,7 @@ export type Database = {
         | "roofer"
         | "hvac"
         | "other"
+      user_role: "tradesman" | "resident"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -227,6 +278,7 @@ export const Constants = {
         "hvac",
         "other",
       ],
+      user_role: ["tradesman", "resident"],
     },
   },
 } as const
