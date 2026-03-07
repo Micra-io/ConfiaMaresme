@@ -95,7 +95,7 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
               }}
               disabled={isUnlocking}
             >
-              <Lock className="h-4 w-4" />
+              <Lock className="h-4 w-4 shrink-0" />
               {isUnlocking ? t('card.unlocking') : t('card.unlockContact')}
             </Button>
           )}
