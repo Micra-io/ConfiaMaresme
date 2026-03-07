@@ -1,0 +1,119 @@
+{
+  "nav": {
+    "directory": "Directory",
+    "myProfile": "My Profile",
+    "signOut": "Sign Out",
+    "signIn": "Sign In"
+  },
+  "hero": {
+    "title": "Trusted professionals in Maresme",
+    "subtitle": "Find electricians, plumbers, carpenters and more — all verified by your local community.",
+    "searchPlaceholder": "Search by name, trade or location..."
+  },
+  "categories": {
+    "title": "Browse by trade",
+    "all": "All",
+    "electrician": "Electrician",
+    "plumber": "Plumber",
+    "carpenter": "Carpenter",
+    "painter": "Painter",
+    "general_handyman": "Handyman",
+    "locksmith": "Locksmith",
+    "gardener": "Gardener",
+    "cleaner": "Cleaner",
+    "mason": "Mason",
+    "roofer": "Roofer",
+    "hvac": "HVAC",
+    "other": "Other"
+  },
+  "card": {
+    "verified": "Verified",
+    "available": "Available",
+    "unlockContact": "Unlock Contact",
+    "unlocking": "Unlocking...",
+    "contactWhatsApp": "Contact via WhatsApp"
+  },
+  "profile": {
+    "notFound": "Professional not found.",
+    "backToDirectory": "Back to directory",
+    "verifiedByCommunity": "Verified by community",
+    "available": "Available",
+    "notAvailable": "Not available",
+    "aboutMe": "About me",
+    "services": "Services",
+    "contactProtected": "Contact information is protected for community members.",
+    "contactWhatsApp": "Contact via WhatsApp"
+  },
+  "unlock": {
+    "title": "Protected community",
+    "description": "To protect our professionals from spam and keep the community local, you need to register as a Maresme resident.",
+    "protectPros": "We protect professionals",
+    "protectProsDesc": "No spam or unwanted calls",
+    "localCommunity": "Verified local community",
+    "localCommunityDesc": "Only real Maresme residents",
+    "signUpResident": "Sign up as a resident",
+    "alreadyHaveAccount": "Already have an account — Sign in",
+    "contactUnlocked": "Contact unlocked!"
+  },
+  "auth": {
+    "residentSignup": "Resident signup",
+    "signIn": "Sign in",
+    "createAccount": "Create account",
+    "residentDesc": "Join the Maresme community to contact trusted professionals.",
+    "signInDesc": "Access your account",
+    "createAccountDesc": "Register to become part of the community",
+    "protectPros": "Your registration helps protect professionals from spam",
+    "directAccess": "Get direct access to verified professionals",
+    "email": "Email",
+    "password": "Password",
+    "loading": "Loading...",
+    "enter": "Sign In",
+    "register": "Register",
+    "noAccount": "Don't have an account? Register",
+    "haveAccount": "Already have an account? Sign in",
+    "welcome": "Welcome!",
+    "accountCreated": "Account created. Check your email to confirm."
+  },
+  "dashboard": {
+    "title": "My Professional Profile",
+    "updateDesc": "Update your information so clients can find you.",
+    "createDesc": "Create your profile to appear in the directory.",
+    "profileInfo": "Profile information",
+    "publicInfo": "This information will be publicly visible.",
+    "fullName": "Full name",
+    "trade": "Trade",
+    "whatsapp": "WhatsApp (with country code)",
+    "whatsappPlaceholder": "+34 612 345 678",
+    "location": "Location",
+    "locationPlaceholder": "E.g.: Mataró, Maresme",
+    "description": "Description",
+    "descriptionPlaceholder": "Tell the community about yourself and your experience...",
+    "services": "Services",
+    "servicePlaceholder": "E.g.: Electrical installation",
+    "addService": "Add",
+    "availableForWork": "Available for work",
+    "availableDesc": "Show that you're accepting new clients",
+    "saving": "Saving...",
+    "updateProfile": "Update profile",
+    "createProfile": "Create profile",
+    "profileSaved": "Profile saved successfully",
+    "neighborInterest": "Neighbor Interest",
+    "neighborInterestDesc": "Neighbors who have unlocked your contact recently.",
+    "noInterestYet": "No interested neighbors yet. Complete your profile to attract more clients!",
+    "anonymousNeighbor": "Anonymous neighbor",
+    "loading": "Loading..."
+  },
+  "footer": {
+    "tagline": "Professionals verified by the Maresme and Barcelona community.",
+    "rights": "All rights reserved."
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Oops! Page not found",
+    "backHome": "Return to Home"
+  },
+  "index": {
+    "noResults": "No professionals found.",
+    "tryChangingFilters": "Try changing the filters or search."
+  }
+}
