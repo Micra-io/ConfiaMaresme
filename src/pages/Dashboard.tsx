@@ -21,7 +21,7 @@ import { ca } from 'date-fns/locale';
 import { enUS } from 'date-fns/locale';
 import { ru } from 'date-fns/locale';
 
-const dateFnsLocales: Record<string, Locale> = { es, ca, en: enUS, ru };
+const dateFnsLocales: Record<string, typeof es> = { es, ca, en: enUS, ru };
 
 const Dashboard = () => {
   const { user, loading: authLoading } = useAuth();
