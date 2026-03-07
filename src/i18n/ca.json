@@ -2,6 +2,7 @@
   "nav": {
     "directory": "Directori",
     "myProfile": "El meu perfil",
+    "myDashboard": "El meu tauler",
     "signOut": "Sortir",
     "signIn": "Accedir"
   },
@@ -72,7 +73,31 @@
     "noAccount": "No tens compte? Registra't",
     "haveAccount": "Ja tens compte? Inicia sessió",
     "welcome": "Benvingut!",
-    "accountCreated": "Compte creat. Revisa el teu correu per confirmar."
+    "accountCreated": "Compte creat. Revisa el teu correu per confirmar.",
+    "continueWithGoogle": "Continuar amb Google",
+    "orWithEmail": "o amb correu",
+    "selectRole": "Com vols fer servir ConfiaMaresme?",
+    "selectRoleDesc": "Tria el teu perfil per personalitzar la teva experiència.",
+    "roleResident": "Veí",
+    "roleResidentDesc": "Busco professionals de confiança per a la meva llar",
+    "roleTradesman": "Professional",
+    "roleTradesmanDesc": "Vull oferir els meus serveis a la comunitat"
+  },
+  "claim": {
+    "title": "Reclama el teu perfil",
+    "desc": "Si ja apareixes al directori, introdueix el teu número de telèfon per reclamar el teu perfil.",
+    "phoneLabel": "Número de telèfon",
+    "verify": "Verificar",
+    "claimTitle": "Crear compte i reclamar",
+    "claimingAs": "Reclamant el perfil de {{name}}",
+    "claimAndCreate": "Crear compte i reclamar perfil",
+    "success": "Perfil reclamat amb èxit!",
+    "successTitle": "Perfil reclamat!",
+    "successDesc": "El teu perfil de professional ha estat vinculat al teu compte. Ja pots gestionar-lo des del teu tauler.",
+    "goToDashboard": "Anar al meu tauler",
+    "notFoundTitle": "Perfil no trobat",
+    "notFoundDesc": "No s'ha trobat cap perfil sense reclamar amb aquest número de telèfon.",
+    "tryAgain": "Tornar a intentar"
   },
   "dashboard": {
     "title": "El meu perfil de professional",

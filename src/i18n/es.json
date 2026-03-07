@@ -2,6 +2,7 @@
   "nav": {
     "directory": "Directorio",
     "myProfile": "Mi Perfil",
+    "myDashboard": "Mi Panel",
     "signOut": "Salir",
     "signIn": "Acceder"
   },
@@ -72,7 +73,31 @@
     "noAccount": "¿No tienes cuenta? Regístrate",
     "haveAccount": "¿Ya tienes cuenta? Inicia sesión",
     "welcome": "¡Bienvenido!",
-    "accountCreated": "Cuenta creada. Revisa tu email para confirmar."
+    "accountCreated": "Cuenta creada. Revisa tu email para confirmar.",
+    "continueWithGoogle": "Continuar con Google",
+    "orWithEmail": "o con email",
+    "selectRole": "¿Cómo quieres usar ConfiaMaresme?",
+    "selectRoleDesc": "Elige tu perfil para personalizar tu experiencia.",
+    "roleResident": "Vecino",
+    "roleResidentDesc": "Busco profesionales de confianza para mi hogar",
+    "roleTradesman": "Profesional",
+    "roleTradesmanDesc": "Quiero ofrecer mis servicios a la comunidad"
+  },
+  "claim": {
+    "title": "Reclama tu perfil",
+    "desc": "Si ya apareces en el directorio, introduce tu número de teléfono para reclamar tu perfil.",
+    "phoneLabel": "Número de teléfono",
+    "verify": "Verificar",
+    "claimTitle": "Crear cuenta y reclamar",
+    "claimingAs": "Reclamando el perfil de {{name}}",
+    "claimAndCreate": "Crear cuenta y reclamar perfil",
+    "success": "¡Perfil reclamado con éxito!",
+    "successTitle": "¡Perfil reclamado!",
+    "successDesc": "Tu perfil de profesional ha sido vinculado a tu cuenta. Ya puedes gestionarlo desde tu panel.",
+    "goToDashboard": "Ir a mi panel",
+    "notFoundTitle": "Perfil no encontrado",
+    "notFoundDesc": "No se encontró ningún perfil sin reclamar con ese número de teléfono.",
+    "tryAgain": "Intentar de nuevo"
   },
   "dashboard": {
     "title": "Mi Perfil de Profesional",
