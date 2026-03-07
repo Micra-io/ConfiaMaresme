@@ -101,6 +101,7 @@ export type Database = {
       }
       tradesmen: {
         Row: {
+          additional_categories: string[]
           bio: string | null
           created_at: string
           full_name: string
@@ -108,6 +109,7 @@ export type Database = {
           is_available: boolean
           is_claimed: boolean
           is_featured: boolean
+          languages: string[]
           location: string | null
           phone_verified: boolean
           profile_image_url: string | null
@@ -121,6 +123,7 @@ export type Database = {
           whatsapp_number: string | null
         }
         Insert: {
+          additional_categories?: string[]
           bio?: string | null
           created_at?: string
           full_name: string
@@ -128,6 +131,7 @@ export type Database = {
           is_available?: boolean
           is_claimed?: boolean
           is_featured?: boolean
+          languages?: string[]
           location?: string | null
           phone_verified?: boolean
           profile_image_url?: string | null
@@ -141,6 +145,7 @@ export type Database = {
           whatsapp_number?: string | null
         }
         Update: {
+          additional_categories?: string[]
           bio?: string | null
           created_at?: string
           full_name?: string
@@ -148,6 +153,7 @@ export type Database = {
           is_available?: boolean
           is_claimed?: boolean
           is_featured?: boolean
+          languages?: string[]
           location?: string | null
           phone_verified?: boolean
           profile_image_url?: string | null
