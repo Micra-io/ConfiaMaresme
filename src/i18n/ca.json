@@ -43,7 +43,8 @@
     "aboutMe": "Sobre mi",
     "services": "Serveis",
     "contactProtected": "La informació de contacte està protegida per als membres de la comunitat.",
-    "contactWhatsApp": "Contactar per WhatsApp"
+    "contactWhatsApp": "Contactar per WhatsApp",
+    "reviews": "Opinions de veïns"
   },
   "unlock": {
     "title": "Comunitat protegida",
@@ -100,7 +101,7 @@
     "tryAgain": "Tornar a intentar"
   },
   "dashboard": {
-    "title": "El meu perfil de professional",
+    "title": "El meu tauler de professional",
     "updateDesc": "Actualitza la teva informació perquè els clients et trobin.",
     "createDesc": "Crea el teu perfil per aparèixer al directori.",
     "profileInfo": "Informació del perfil",
@@ -126,7 +127,31 @@
     "neighborInterestDesc": "Veïns que han desbloquejat el teu contacte recentment.",
     "noInterestYet": "Encara no hi ha veïns interessats. Completa el teu perfil per atraure més clients!",
     "anonymousNeighbor": "Veí anònim",
-    "loading": "Carregant..."
+    "loading": "Carregant...",
+    "reviews": "Opinions",
+    "reviewsDesc": "Opinions que els veïns han deixat sobre el teu treball.",
+    "totalReviews": "{{count}} opinions",
+    "noReviewsYet": "Encara no tens opinions. Fes una bona feina i els veïns et valoraran!",
+    "settings": "Configuració",
+    "settingsDesc": "Gestiona el teu compte i subscripció.",
+    "upgradePro": "Fes-te Pro",
+    "upgradeProDesc": "Destaca el teu perfil, apareix primer a les cerques i accedeix a estadístiques avançades.",
+    "comingSoon": "Properament",
+    "nav": {
+      "profile": "Perfil",
+      "leads": "Contactes",
+      "reviews": "Opinions",
+      "settings": "Ajustos"
+    }
+  },
+  "reviews": {
+    "leaveReview": "Deixa la teva opinió",
+    "reviewFor": "Com va ser la teva experiència amb {{name}}?",
+    "commentPlaceholder": "Explica'ns la teva experiència...",
+    "submit": "Enviar opinió",
+    "submitted": "Opinió enviada! Gràcies.",
+    "tooEarly": "Has d'esperar 24 hores després de desbloquejar el contacte per deixar una opinió.",
+    "alreadyReviewed": "Ja has deixat una opinió per a aquest professional."
   },
   "footer": {
     "tagline": "Professionals verificats per la comunitat del Maresme i Barcelona.",
