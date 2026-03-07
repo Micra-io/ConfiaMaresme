@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { MapPin, ShieldCheck, User } from 'lucide-react';
 import { getCategoryLabel } from '@/lib/constants';
-import type { Tables } from '@/integrations/supabase/types';
+import type { Tables } from '@/lib/database.types';
 
 interface TradesmanCardProps {
   tradesman: Tables<'tradesmen'>;
