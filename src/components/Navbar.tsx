@@ -63,8 +63,8 @@ const Navbar = () => {
           {user ? (
             <>
               <Link to="/dashboard">
-                <Button variant="ghost" size="sm" className="gap-2">
-                  <User className="h-4 w-4" /> {t('nav.myProfile')}
+                <Button variant="ghost" size="sm" className="gap-2 whitespace-nowrap">
+                  <User className="h-4 w-4 shrink-0" /> {t('nav.myProfile')}
                 </Button>
               </Link>
               <Button variant="outline" size="sm" onClick={signOut} className="gap-2">
