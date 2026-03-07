@@ -13,9 +13,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-const LANGUAGES = [
+const UI_LANGUAGES = [
   { code: 'es', label: 'Español', flag: '🇪🇸' },
-  { code: 'ca', label: 'Català', flag: '🏳️' },
+  { code: 'ca', label: 'Català', flag: '🏴󠁥󠁳󠁣󠁴󠁿' },
   { code: 'en', label: 'English', flag: '🇬🇧' },
   { code: 'ru', label: 'Русский', flag: '🇷🇺' },
 ];
@@ -26,7 +26,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const currentLang = LANGUAGES.find((l) => l.code === i18n.language) || LANGUAGES[0];
+  const currentLang = UI_LANGUAGES.find((l) => l.code === i18n.language) || UI_LANGUAGES[0];
   const initials = user?.email?.substring(0, 2).toUpperCase() || '?';
 
   const handleSignOut = async () => {
@@ -58,7 +58,7 @@ const Navbar = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {LANGUAGES.map((lang) => (
+              {UI_LANGUAGES.map((lang) => (
                 <DropdownMenuItem
                   key={lang.code}
                   onClick={() => i18n.changeLanguage(lang.code)}
@@ -114,7 +114,7 @@ const Navbar = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {LANGUAGES.map((lang) => (
+              {UI_LANGUAGES.map((lang) => (
                 <DropdownMenuItem
                   key={lang.code}
                   onClick={() => i18n.changeLanguage(lang.code)}

@@ -174,7 +174,7 @@ const DashboardProfileEditor = () => {
                     checked={languages.includes(l.value)}
                     onCheckedChange={() => toggleLanguage(l.value)}
                   />
-                  {l.label}
+                  {t(`languages.${l.value}`, l.label)}
                 </label>
               ))}
             </div>
