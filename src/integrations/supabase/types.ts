@@ -64,6 +64,41 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          id: string
+          rating: number
+          resident_id: string
+          tradesman_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating: number
+          resident_id: string
+          tradesman_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating?: number
+          resident_id?: string
+          tradesman_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_tradesman_id_fkey"
+            columns: ["tradesman_id"]
+            isOneToOne: false
+            referencedRelation: "tradesmen"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tradesmen: {
         Row: {
           bio: string | null
@@ -72,14 +107,17 @@ export type Database = {
           id: string
           is_available: boolean
           is_claimed: boolean
+          is_featured: boolean
           location: string | null
           phone_verified: boolean
           profile_image_url: string | null
           services: string[] | null
+          subscription_tier: string
           trade_category: Database["public"]["Enums"]["trade_category"]
           updated_at: string
           user_id: string | null
           vetted_by_community: boolean
+          view_count: number
           whatsapp_number: string | null
         }
         Insert: {
@@ -89,14 +127,17 @@ export type Database = {
           id?: string
           is_available?: boolean
           is_claimed?: boolean
+          is_featured?: boolean
           location?: string | null
           phone_verified?: boolean
           profile_image_url?: string | null
           services?: string[] | null
+          subscription_tier?: string
           trade_category?: Database["public"]["Enums"]["trade_category"]
           updated_at?: string
           user_id?: string | null
           vetted_by_community?: boolean
+          view_count?: number
           whatsapp_number?: string | null
         }
         Update: {
@@ -106,14 +147,17 @@ export type Database = {
           id?: string
           is_available?: boolean
           is_claimed?: boolean
+          is_featured?: boolean
           location?: string | null
           phone_verified?: boolean
           profile_image_url?: string | null
           services?: string[] | null
+          subscription_tier?: string
           trade_category?: Database["public"]["Enums"]["trade_category"]
           updated_at?: string
           user_id?: string | null
           vetted_by_community?: boolean
+          view_count?: number
           whatsapp_number?: string | null
         }
         Relationships: []
