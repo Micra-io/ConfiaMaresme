@@ -43,7 +43,8 @@
     "aboutMe": "About me",
     "services": "Services",
     "contactProtected": "Contact information is protected for community members.",
-    "contactWhatsApp": "Contact via WhatsApp"
+    "contactWhatsApp": "Contact via WhatsApp",
+    "reviews": "Neighbor reviews"
   },
   "unlock": {
     "title": "Protected community",
@@ -100,7 +101,7 @@
     "tryAgain": "Try again"
   },
   "dashboard": {
-    "title": "My Professional Profile",
+    "title": "My Professional Dashboard",
     "updateDesc": "Update your information so clients can find you.",
     "createDesc": "Create your profile to appear in the directory.",
     "profileInfo": "Profile information",
@@ -126,7 +127,31 @@
     "neighborInterestDesc": "Neighbors who have unlocked your contact recently.",
     "noInterestYet": "No interested neighbors yet. Complete your profile to attract more clients!",
     "anonymousNeighbor": "Anonymous neighbor",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "reviews": "Reviews",
+    "reviewsDesc": "Reviews left by neighbors about your work.",
+    "totalReviews": "{{count}} reviews",
+    "noReviewsYet": "No reviews yet. Do great work and neighbors will rate you!",
+    "settings": "Settings",
+    "settingsDesc": "Manage your account and subscription.",
+    "upgradePro": "Upgrade to Pro",
+    "upgradeProDesc": "Feature your profile, appear first in search, and access advanced analytics.",
+    "comingSoon": "Coming soon",
+    "nav": {
+      "profile": "Profile",
+      "leads": "Leads",
+      "reviews": "Reviews",
+      "settings": "Settings"
+    }
+  },
+  "reviews": {
+    "leaveReview": "Leave a review",
+    "reviewFor": "How was your experience with {{name}}?",
+    "commentPlaceholder": "Tell us about your experience...",
+    "submit": "Submit review",
+    "submitted": "Review submitted! Thank you.",
+    "tooEarly": "You must wait 24 hours after unlocking the contact to leave a review.",
+    "alreadyReviewed": "You've already reviewed this professional."
   },
   "footer": {
     "tagline": "Professionals verified by the Maresme and Barcelona community.",

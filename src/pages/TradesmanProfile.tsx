@@ -5,14 +5,26 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowLeft, MapPin, MessageCircle, ShieldCheck, User, Phone, Lock } from 'lucide-react';
+import { ArrowLeft, MapPin, MessageCircle, ShieldCheck, User, Phone, Lock, Star } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useUnlockContact } from '@/hooks/useUnlockContact';
 import UnlockContactModal from '@/components/UnlockContactModal';
+import { formatDistanceToNow } from 'date-fns';
+import { es, ca, enUS, ru } from 'date-fns/locale';
+
+const dateFnsLocales: Record<string, typeof es> = { es, ca, en: enUS, ru };
+
+const StarRating = ({ rating }: { rating: number }) => (
+  <div className="flex gap-0.5">
+    {[1, 2, 3, 4, 5].map((s) => (
+      <Star key={s} className={`h-4 w-4 ${s <= rating ? 'fill-accent text-accent' : 'text-muted-foreground/30'}`} />
+    ))}
+  </div>
+);
 
 const TradesmanProfile = () => {
   const { id } = useParams<{ id: string }>();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { data: tradesman, isLoading } = useQuery({
     queryKey: ['tradesman', id],
@@ -27,6 +39,37 @@ const TradesmanProfile = () => {
     },
     enabled: !!id,
   });
+
+  const { data: reviews } = useQuery({
+    queryKey: ['reviews', id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('reviews')
+        .select('*')
+        .eq('tradesman_id', id!)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        const residentIds = data.map((r) => r.resident_id);
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id, display_name')
+          .in('id', residentIds);
+        const profileMap = new Map(profiles?.map((p) => [p.id, p.display_name]) || []);
+        return data.map((r) => ({
+          ...r,
+          resident_name: profileMap.get(r.resident_id) || t('dashboard.anonymousNeighbor'),
+        }));
+      }
+      return [];
+    },
+    enabled: !!id,
+  });
+
+  const avgRating = reviews && reviews.length > 0
+    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+    : null;
 
   const { isUnlocked, isUnlocking, handleUnlock, showAuthModal, setShowAuthModal } =
     useUnlockContact(id || '');
@@ -84,7 +127,7 @@ const TradesmanProfile = () => {
                 </div>
               )}
 
-              <div className="mt-3 flex flex-wrap gap-2">
+              <div className="mt-3 flex flex-wrap items-center gap-2">
                 {tradesman.vetted_by_community && (
                   <Badge className="gap-1 bg-success text-success-foreground">
                     <ShieldCheck className="h-3 w-3" /> {t('profile.verifiedByCommunity')}
@@ -94,6 +137,13 @@ const TradesmanProfile = () => {
                   <Badge variant="outline" className="text-secondary border-secondary">{t('profile.available')}</Badge>
                 ) : (
                   <Badge variant="outline" className="text-muted-foreground">{t('profile.notAvailable')}</Badge>
+                )}
+                {avgRating !== null && (
+                  <div className="flex items-center gap-1.5 ml-1">
+                    <Star className="h-4 w-4 fill-accent text-accent" />
+                    <span className="text-sm font-semibold">{avgRating.toFixed(1)}</span>
+                    <span className="text-xs text-muted-foreground">({reviews?.length})</span>
+                  </div>
                 )}
               </div>
             </div>
@@ -153,6 +203,34 @@ const TradesmanProfile = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Reviews section */}
+      {reviews && reviews.length > 0 && (
+        <Card className="mt-6">
+          <CardContent className="p-6 md:p-8">
+            <h2 className="font-display text-xl font-semibold mb-4">{t('profile.reviews')}</h2>
+            <div className="space-y-4">
+              {reviews.slice(0, 5).map((review) => (
+                <div key={review.id} className="rounded-lg border p-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-sm font-medium">{review.resident_name}</p>
+                    <span className="text-xs text-muted-foreground">
+                      {formatDistanceToNow(new Date(review.created_at), {
+                        addSuffix: true,
+                        locale: dateFnsLocales[i18n.language] || dateFnsLocales.es,
+                      })}
+                    </span>
+                  </div>
+                  <StarRating rating={review.rating} />
+                  {review.comment && (
+                    <p className="mt-2 text-sm text-muted-foreground">{review.comment}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <UnlockContactModal open={showAuthModal} onOpenChange={setShowAuthModal} />
     </div>

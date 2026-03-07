@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,6 +11,7 @@ import SEOHead from "@/components/SEOHead";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import ReviewPromptWrapper from "@/components/ReviewPromptWrapper";
 import Index from "./pages/Index";
 import TradesmanProfile from "./pages/TradesmanProfile";
 import Auth from "./pages/Auth";
@@ -46,6 +48,7 @@ const App = () => (
               </main>
               <Footer />
             </div>
+            <ReviewPromptWrapper />
           </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
