@@ -34,8 +34,8 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop */}
-        <div className="hidden items-center gap-4 md:flex">
-          <Link to="/" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+        <div className="hidden items-center gap-3 md:flex">
+          <Link to="/" className="whitespace-nowrap text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
             {t('nav.directory')}
           </Link>
 
