@@ -1,13 +1,15 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
-import { LogOut, User, Menu, X, Globe } from 'lucide-react';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Globe, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
@@ -19,11 +21,18 @@ const LANGUAGES = [
 ];
 
 const Navbar = () => {
-  const { user, signOut } = useAuth();
+  const { user, userRole, signOut } = useAuth();
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const currentLang = LANGUAGES.find((l) => l.code === i18n.language) || LANGUAGES[0];
+  const initials = user?.email?.substring(0, 2).toUpperCase() || '?';
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   return (
     <nav className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-md">
@@ -61,16 +70,36 @@ const Navbar = () => {
           </DropdownMenu>
 
           {user ? (
-            <>
-              <Link to="/dashboard">
-                <Button variant="ghost" size="sm" className="gap-2 whitespace-nowrap">
-                  <User className="h-4 w-4 shrink-0" /> {t('nav.myProfile')}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-2 rounded-full px-2">
+                  <Avatar className="h-7 w-7">
+                    <AvatarFallback className="bg-primary text-xs text-primary-foreground">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
                 </Button>
-              </Link>
-              <Button variant="outline" size="sm" onClick={signOut} className="gap-2 whitespace-nowrap">
-                <LogOut className="h-4 w-4 shrink-0" /> {t('nav.signOut')}
-              </Button>
-            </>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <div className="px-2 py-1.5">
+                  <p className="truncate text-sm font-medium">{user.email}</p>
+                  <p className="text-xs text-muted-foreground capitalize">{userRole || 'user'}</p>
+                </div>
+                <DropdownMenuSeparator />
+                {userRole === 'tradesman' && (
+                  <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                    {t('nav.myDashboard')}
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                  {t('nav.myProfile')}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
+                  {t('nav.signOut')}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <Link to="/auth">
               <Button size="sm">{t('nav.signIn')}</Button>
@@ -113,8 +142,14 @@ const Navbar = () => {
             <Link to="/" onClick={() => setMobileOpen(false)} className="text-sm font-medium">{t('nav.directory')}</Link>
             {user ? (
               <>
+                <div className="flex items-center gap-2 pb-2 border-b">
+                  <Avatar className="h-6 w-6">
+                    <AvatarFallback className="bg-primary text-xs text-primary-foreground">{initials}</AvatarFallback>
+                  </Avatar>
+                  <span className="truncate text-sm text-muted-foreground">{user.email}</span>
+                </div>
                 <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="text-sm font-medium">{t('nav.myProfile')}</Link>
-                <button onClick={() => { signOut(); setMobileOpen(false); }} className="text-left text-sm font-medium text-destructive">{t('nav.signOut')}</button>
+                <button onClick={() => { handleSignOut(); setMobileOpen(false); }} className="text-left text-sm font-medium text-destructive">{t('nav.signOut')}</button>
               </>
             ) : (
               <Link to="/auth" onClick={() => setMobileOpen(false)} className="text-sm font-medium text-primary">{t('nav.signIn')}</Link>

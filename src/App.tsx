@@ -9,10 +9,12 @@ import '@/i18n';
 import SEOHead from "@/components/SEOHead";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import TradesmanProfile from "./pages/TradesmanProfile";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import ClaimProfile from "./pages/ClaimProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,7 +35,12 @@ const App = () => (
                   <Route path="/" element={<Index />} />
                   <Route path="/tradesman/:id" element={<TradesmanProfile />} />
                   <Route path="/auth" element={<Auth />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/claim" element={<ClaimProfile />} />
+                  <Route path="/dashboard" element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  } />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
