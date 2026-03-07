@@ -81,7 +81,7 @@ const Dashboard = () => {
             <SidebarTrigger className="mr-3" />
             <h1 className="font-display text-lg font-bold">{t('dashboard.title')}</h1>
           </header>
-          <main className="flex-1 p-6 max-w-3xl">
+          <main className="flex-1 p-4 sm:p-6 max-w-3xl w-full">
             {activeTab === 'profile' && <DashboardProfileEditor />}
             {activeTab === 'leads' && <DashboardLeads />}
             {activeTab === 'reviews' && <DashboardReviews />}

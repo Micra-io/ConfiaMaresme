@@ -34,6 +34,8 @@ const Navbar = () => {
     navigate('/');
   };
 
+  const dashboardLabel = userRole === 'tradesman' ? t('nav.myDashboard') : t('nav.myProfile');
+
   return (
     <nav className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-md">
       <div className="container mx-auto flex items-center justify-between gap-2 px-4 py-3">
@@ -86,13 +88,8 @@ const Navbar = () => {
                   <p className="text-xs text-muted-foreground capitalize">{userRole || 'user'}</p>
                 </div>
                 <DropdownMenuSeparator />
-                {userRole === 'tradesman' && (
-                  <DropdownMenuItem onClick={() => navigate('/dashboard')}>
-                    {t('nav.myDashboard')}
-                  </DropdownMenuItem>
-                )}
                 <DropdownMenuItem onClick={() => navigate('/dashboard')}>
-                  {t('nav.myProfile')}
+                  {dashboardLabel}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
@@ -129,7 +126,7 @@ const Navbar = () => {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-          <button onClick={() => setMobileOpen(!mobileOpen)}>
+          <button onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
@@ -148,7 +145,7 @@ const Navbar = () => {
                   </Avatar>
                   <span className="truncate text-sm text-muted-foreground">{user.email}</span>
                 </div>
-                <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="text-sm font-medium">{t('nav.myProfile')}</Link>
+                <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="text-sm font-medium">{dashboardLabel}</Link>
                 <button onClick={() => { handleSignOut(); setMobileOpen(false); }} className="text-left text-sm font-medium text-destructive">{t('nav.signOut')}</button>
               </>
             ) : (
