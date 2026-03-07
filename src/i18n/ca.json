@@ -44,7 +44,23 @@
     "services": "Serveis",
     "contactProtected": "La informació de contacte està protegida per als membres de la comunitat.",
     "contactWhatsApp": "Contactar per WhatsApp",
-    "reviews": "Opinions de veïns"
+    "reviews": "Opinions de veïns",
+    "languages": "Idiomes",
+    "alsoDoesTitle": "També treballa en"
+  },
+  "languages": {
+    "es": "Español",
+    "ca": "Català",
+    "en": "English",
+    "ru": "Русский",
+    "fr": "Français",
+    "de": "Deutsch",
+    "ar": "العربية",
+    "zh": "中文",
+    "pt": "Português",
+    "it": "Italiano",
+    "ro": "Română",
+    "uk": "Українська"
   },
   "unlock": {
     "title": "Comunitat protegida",
