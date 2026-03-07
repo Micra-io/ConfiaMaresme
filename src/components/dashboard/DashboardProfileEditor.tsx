@@ -8,11 +8,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
-import { TRADE_CATEGORIES } from '@/lib/constants';
+import { TRADE_CATEGORIES, LANGUAGES } from '@/lib/constants';
 import { X } from 'lucide-react';
 
 const DashboardProfileEditor = () => {
@@ -22,6 +23,8 @@ const DashboardProfileEditor = () => {
 
   const [fullName, setFullName] = useState('');
   const [tradeCategory, setTradeCategory] = useState('general_handyman');
+  const [additionalCategories, setAdditionalCategories] = useState<string[]>([]);
+  const [languages, setLanguages] = useState<string[]>([]);
   const [whatsappNumber, setWhatsappNumber] = useState('');
   const [bio, setBio] = useState('');
   const [location, setLocation] = useState('Maresme');
@@ -47,6 +50,8 @@ const DashboardProfileEditor = () => {
     if (profile) {
       setFullName(profile.full_name);
       setTradeCategory(profile.trade_category);
+      setAdditionalCategories((profile as any).additional_categories || []);
+      setLanguages((profile as any).languages || []);
       setWhatsappNumber(profile.whatsapp_number || '');
       setBio(profile.bio || '');
       setLocation(profile.location || 'Maresme');
@@ -61,6 +66,8 @@ const DashboardProfileEditor = () => {
         user_id: user!.id,
         full_name: fullName,
         trade_category: tradeCategory as any,
+        additional_categories: additionalCategories,
+        languages,
         whatsapp_number: whatsappNumber || null,
         bio: bio || null,
         location: location || null,
@@ -95,6 +102,19 @@ const DashboardProfileEditor = () => {
     }
   };
 
+  const toggleAdditionalCategory = (value: string) => {
+    if (value === tradeCategory) return;
+    setAdditionalCategories(prev =>
+      prev.includes(value) ? prev.filter(c => c !== value) : [...prev, value]
+    );
+  };
+
+  const toggleLanguage = (value: string) => {
+    setLanguages(prev =>
+      prev.includes(value) ? prev.filter(l => l !== value) : [...prev, value]
+    );
+  };
+
   if (isLoading) {
     return <p className="text-muted-foreground py-8 text-center">{t('dashboard.loading')}</p>;
   }
@@ -123,6 +143,40 @@ const DashboardProfileEditor = () => {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+          </div>
+
+          {/* Additional trades */}
+          <div className="space-y-2">
+            <Label>{t('dashboard.additionalTrades')}</Label>
+            <p className="text-xs text-muted-foreground">{t('dashboard.additionalTradesDesc')}</p>
+            <div className="flex flex-wrap gap-3 mt-1">
+              {TRADE_CATEGORIES.filter(c => c.value !== tradeCategory).map(c => (
+                <label key={c.value} className="flex items-center gap-1.5 text-sm cursor-pointer">
+                  <Checkbox
+                    checked={additionalCategories.includes(c.value)}
+                    onCheckedChange={() => toggleAdditionalCategory(c.value)}
+                  />
+                  {t(`categories.${c.value}`)}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Languages */}
+          <div className="space-y-2">
+            <Label>{t('dashboard.languages')}</Label>
+            <p className="text-xs text-muted-foreground">{t('dashboard.languagesDesc')}</p>
+            <div className="flex flex-wrap gap-3 mt-1">
+              {LANGUAGES.map(l => (
+                <label key={l.value} className="flex items-center gap-1.5 text-sm cursor-pointer">
+                  <Checkbox
+                    checked={languages.includes(l.value)}
+                    onCheckedChange={() => toggleLanguage(l.value)}
+                  />
+                  {l.label}
+                </label>
+              ))}
             </div>
           </div>
 

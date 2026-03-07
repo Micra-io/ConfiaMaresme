@@ -155,6 +155,15 @@ const TradesmanProfile = () => {
             </div>
           </div>
 
+          {(tradesman as any).languages?.length > 0 && (
+            <div className="mt-6 flex flex-wrap items-center gap-2">
+              <span className="text-sm font-medium text-muted-foreground">{t('profile.languages')}:</span>
+              {(tradesman as any).languages.map((lang: string) => (
+                <Badge key={lang} variant="outline">{t(`languages.${lang}`, lang)}</Badge>
+              ))}
+            </div>
+          )}
+
           {tradesman.bio && (
             <div className="mt-8">
               <h2 className="font-display text-xl font-semibold">{t('profile.aboutMe')}</h2>

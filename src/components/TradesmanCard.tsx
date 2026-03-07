@@ -12,6 +12,8 @@ interface TradesmanCardProps {
     id: string;
     full_name: string;
     trade_category: string;
+    additional_categories?: string[];
+    languages?: string[];
     location: string | null;
     bio: string | null;
     profile_image_url: string | null;
