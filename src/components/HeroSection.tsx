@@ -1,5 +1,6 @@
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { useTranslation } from 'react-i18next';
 import heroImage from '@/assets/hero-maresme.jpg';
 
 interface HeroSectionProps {
@@ -8,6 +9,8 @@ interface HeroSectionProps {
 }
 
 const HeroSection = ({ searchQuery, onSearchChange }: HeroSectionProps) => {
+  const { t } = useTranslation();
+
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0">
@@ -16,16 +19,16 @@ const HeroSection = ({ searchQuery, onSearchChange }: HeroSectionProps) => {
       </div>
       <div className="relative mx-auto max-w-4xl px-4 py-20 text-center md:py-32">
         <h1 className="animate-fade-in font-display text-4xl font-bold text-primary-foreground md:text-5xl lg:text-6xl">
-          Profesionales de confianza en el Maresme
+          {t('hero.title')}
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-primary-foreground/80" style={{ animationDelay: '0.1s' }}>
-          Encuentra electricistas, fontaneros, carpinteros y más — todos verificados por tu comunidad local.
+          {t('hero.subtitle')}
         </p>
         <div className="mx-auto mt-8 max-w-xl" style={{ animationDelay: '0.2s' }}>
           <div className="relative">
             <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Buscar por nombre, oficio o ubicación..."
+              placeholder={t('hero.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               className="h-12 rounded-full border-0 bg-card pl-12 text-base shadow-lg"

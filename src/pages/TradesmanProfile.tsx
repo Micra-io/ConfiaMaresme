@@ -1,17 +1,18 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, MapPin, MessageCircle, ShieldCheck, User, Phone, Lock } from 'lucide-react';
-import { getCategoryLabel } from '@/lib/constants';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useUnlockContact } from '@/hooks/useUnlockContact';
 import UnlockContactModal from '@/components/UnlockContactModal';
 
 const TradesmanProfile = () => {
   const { id } = useParams<{ id: string }>();
+  const { t } = useTranslation();
 
   const { data: tradesman, isLoading } = useQuery({
     queryKey: ['tradesman', id],
@@ -42,9 +43,9 @@ const TradesmanProfile = () => {
   if (!tradesman) {
     return (
       <div className="container mx-auto px-4 py-20 text-center">
-        <p className="text-lg text-muted-foreground">Profesional no encontrado.</p>
+        <p className="text-lg text-muted-foreground">{t('profile.notFound')}</p>
         <Link to="/">
-          <Button variant="outline" className="mt-4">Volver al directorio</Button>
+          <Button variant="outline" className="mt-4">{t('profile.backToDirectory')}</Button>
         </Link>
       </div>
     );
@@ -57,7 +58,7 @@ const TradesmanProfile = () => {
   return (
     <div className="container mx-auto max-w-3xl px-4 py-10">
       <Link to="/" className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="h-4 w-4" /> Volver al directorio
+        <ArrowLeft className="h-4 w-4" /> {t('profile.backToDirectory')}
       </Link>
 
       <Card>
@@ -74,7 +75,7 @@ const TradesmanProfile = () => {
             <div className="flex-1">
               <h1 className="font-display text-3xl font-bold">{tradesman.full_name}</h1>
               <p className="mt-1 text-lg font-medium text-secondary">
-                {getCategoryLabel(tradesman.trade_category)}
+                {t(`categories.${tradesman.trade_category}`)}
               </p>
 
               {tradesman.location && (
@@ -86,13 +87,13 @@ const TradesmanProfile = () => {
               <div className="mt-3 flex flex-wrap gap-2">
                 {tradesman.vetted_by_community && (
                   <Badge className="gap-1 bg-success text-success-foreground">
-                    <ShieldCheck className="h-3 w-3" /> Verificado por la comunidad
+                    <ShieldCheck className="h-3 w-3" /> {t('profile.verifiedByCommunity')}
                   </Badge>
                 )}
                 {tradesman.is_available ? (
-                  <Badge variant="outline" className="text-secondary border-secondary">Disponible</Badge>
+                  <Badge variant="outline" className="text-secondary border-secondary">{t('profile.available')}</Badge>
                 ) : (
-                  <Badge variant="outline" className="text-muted-foreground">No disponible</Badge>
+                  <Badge variant="outline" className="text-muted-foreground">{t('profile.notAvailable')}</Badge>
                 )}
               </div>
             </div>
@@ -100,14 +101,14 @@ const TradesmanProfile = () => {
 
           {tradesman.bio && (
             <div className="mt-8">
-              <h2 className="font-display text-xl font-semibold">Sobre mí</h2>
+              <h2 className="font-display text-xl font-semibold">{t('profile.aboutMe')}</h2>
               <p className="mt-2 leading-relaxed text-muted-foreground">{tradesman.bio}</p>
             </div>
           )}
 
           {tradesman.services && tradesman.services.length > 0 && (
             <div className="mt-8">
-              <h2 className="font-display text-xl font-semibold">Servicios</h2>
+              <h2 className="font-display text-xl font-semibold">{t('profile.services')}</h2>
               <div className="mt-3 flex flex-wrap gap-2">
                 {tradesman.services.map((s: string, i: number) => (
                   <Badge key={i} variant="secondary">{s}</Badge>
@@ -116,14 +117,13 @@ const TradesmanProfile = () => {
             </div>
           )}
 
-          {/* Gated contact section */}
           <div className="mt-8">
             {isUnlocked ? (
               <div className="space-y-3">
                 {whatsappLink && (
                   <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
                     <Button size="lg" className="gap-2 bg-success text-success-foreground hover:bg-success/90">
-                      <MessageCircle className="h-5 w-5" /> Contactar por WhatsApp
+                      <MessageCircle className="h-5 w-5" /> {t('profile.contactWhatsApp')}
                     </Button>
                   </a>
                 )}
@@ -137,7 +137,7 @@ const TradesmanProfile = () => {
               <div className="rounded-lg border-2 border-dashed border-primary/20 bg-primary/5 p-6 text-center">
                 <Lock className="mx-auto mb-2 h-8 w-8 text-primary/60" />
                 <p className="mb-3 text-sm text-muted-foreground">
-                  La información de contacto está protegida para los miembros de la comunidad.
+                  {t('profile.contactProtected')}
                 </p>
                 <Button
                   size="lg"
@@ -146,7 +146,7 @@ const TradesmanProfile = () => {
                   disabled={isUnlocking}
                 >
                   <Lock className="h-4 w-4" />
-                  {isUnlocking ? 'Desbloqueando...' : 'Desbloquear contacto'}
+                  {isUnlocking ? t('card.unlocking') : t('card.unlockContact')}
                 </Button>
               </div>
             )}

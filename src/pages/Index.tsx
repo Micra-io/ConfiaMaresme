@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import HeroSection from '@/components/HeroSection';
 import CategoryFilter from '@/components/CategoryFilter';
@@ -9,6 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const { data: tradesmen, isLoading } = useQuery({
     queryKey: ['tradesmen', selectedCategory, searchQuery],
@@ -35,7 +37,7 @@ const Index = () => {
 
       <div className="container mx-auto px-4 py-10">
         <div className="mb-8">
-          <h2 className="mb-4 font-display text-2xl font-bold">Buscar por oficio</h2>
+          <h2 className="mb-4 font-display text-2xl font-bold">{t('categories.title')}</h2>
           <CategoryFilter selected={selectedCategory} onSelect={setSelectedCategory} />
         </div>
 
@@ -54,10 +56,10 @@ const Index = () => {
         ) : (
           <div className="rounded-lg border border-dashed bg-muted/50 p-12 text-center">
             <p className="text-lg font-medium text-muted-foreground">
-              No se encontraron profesionales.
+              {t('index.noResults')}
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Intenta cambiar los filtros o la búsqueda.
+              {t('index.tryChangingFilters')}
             </p>
           </div>
         )}
