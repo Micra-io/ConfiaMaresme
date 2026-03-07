@@ -1,0 +1,135 @@
+import { useParams, Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { ArrowLeft, MapPin, MessageCircle, ShieldCheck, User, Phone } from 'lucide-react';
+import { getCategoryLabel } from '@/lib/constants';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const TradesmanProfile = () => {
+  const { id } = useParams<{ id: string }>();
+
+  const { data: tradesman, isLoading } = useQuery({
+    queryKey: ['tradesman', id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('tradesmen')
+        .select('*')
+        .eq('id', id!)
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!id,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto max-w-3xl px-4 py-10">
+        <Skeleton className="mb-6 h-8 w-32" />
+        <Skeleton className="h-96 rounded-lg" />
+      </div>
+    );
+  }
+
+  if (!tradesman) {
+    return (
+      <div className="container mx-auto px-4 py-20 text-center">
+        <p className="text-lg text-muted-foreground">Profesional no encontrado.</p>
+        <Link to="/">
+          <Button variant="outline" className="mt-4">Volver al directorio</Button>
+        </Link>
+      </div>
+    );
+  }
+
+  const whatsappLink = tradesman.whatsapp_number
+    ? `https://wa.me/${tradesman.whatsapp_number.replace(/\D/g, '')}`
+    : null;
+
+  return (
+    <div className="container mx-auto max-w-3xl px-4 py-10">
+      <Link to="/" className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+        <ArrowLeft className="h-4 w-4" /> Volver al directorio
+      </Link>
+
+      <Card>
+        <CardContent className="p-6 md:p-8">
+          <div className="flex flex-col items-start gap-6 md:flex-row">
+            <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted">
+              {tradesman.profile_image_url ? (
+                <img src={tradesman.profile_image_url} alt={tradesman.full_name} className="h-full w-full object-cover" />
+              ) : (
+                <User className="h-10 w-10 text-muted-foreground" />
+              )}
+            </div>
+
+            <div className="flex-1">
+              <h1 className="font-display text-3xl font-bold">{tradesman.full_name}</h1>
+              <p className="mt-1 text-lg font-medium text-secondary">
+                {getCategoryLabel(tradesman.trade_category)}
+              </p>
+
+              {tradesman.location && (
+                <div className="mt-2 flex items-center gap-1.5 text-muted-foreground">
+                  <MapPin className="h-4 w-4" /> {tradesman.location}
+                </div>
+              )}
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                {tradesman.vetted_by_community && (
+                  <Badge className="gap-1 bg-success text-success-foreground">
+                    <ShieldCheck className="h-3 w-3" /> Verificado por la comunidad
+                  </Badge>
+                )}
+                {tradesman.is_available ? (
+                  <Badge variant="outline" className="text-secondary border-secondary">Disponible</Badge>
+                ) : (
+                  <Badge variant="outline" className="text-muted-foreground">No disponible</Badge>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {tradesman.bio && (
+            <div className="mt-8">
+              <h2 className="font-display text-xl font-semibold">Sobre mí</h2>
+              <p className="mt-2 leading-relaxed text-muted-foreground">{tradesman.bio}</p>
+            </div>
+          )}
+
+          {tradesman.services && tradesman.services.length > 0 && (
+            <div className="mt-8">
+              <h2 className="font-display text-xl font-semibold">Servicios</h2>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {tradesman.services.map((s, i) => (
+                  <Badge key={i} variant="secondary">{s}</Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {whatsappLink && (
+            <div className="mt-8">
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" className="gap-2 bg-success text-success-foreground hover:bg-success/90">
+                  <MessageCircle className="h-5 w-5" /> Contactar por WhatsApp
+                </Button>
+              </a>
+            </div>
+          )}
+
+          {tradesman.whatsapp_number && (
+            <div className="mt-3 flex items-center gap-1.5 text-sm text-muted-foreground">
+              <Phone className="h-3.5 w-3.5" /> {tradesman.whatsapp_number}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default TradesmanProfile;
