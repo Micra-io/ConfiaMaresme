@@ -13,7 +13,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { TRADE_CATEGORIES } from '@/lib/constants';
-import { X } from 'lucide-react';
+import { X, Users, Clock } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 const Dashboard = () => {
   const { user, loading: authLoading } = useAuth();
@@ -45,6 +47,37 @@ const Dashboard = () => {
       return data;
     },
     enabled: !!user,
+  });
+
+  // Fetch leads (neighbor interest)
+  const { data: leads } = useQuery({
+    queryKey: ['my-leads', profile?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('leads')
+        .select('id, created_at, resident_id')
+        .eq('tradesman_id', profile!.id)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      if (error) throw error;
+
+      // Fetch resident display names from profiles
+      if (data && data.length > 0) {
+        const residentIds = data.map((l) => l.resident_id);
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id, display_name')
+          .in('id', residentIds);
+
+        const profileMap = new Map(profiles?.map((p) => [p.id, p.display_name]) || []);
+        return data.map((l) => ({
+          ...l,
+          resident_name: profileMap.get(l.resident_id) || 'Vecino anónimo',
+        }));
+      }
+      return [];
+    },
+    enabled: !!profile?.id,
   });
 
   useEffect(() => {
@@ -196,6 +229,51 @@ const Dashboard = () => {
           </Button>
         </CardContent>
       </Card>
+
+      {/* Neighbor Interest Section */}
+      {profile && (
+        <Card className="mt-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-primary" />
+              Interés de vecinos
+            </CardTitle>
+            <CardDescription>
+              Vecinos que han desbloqueado tu contacto recientemente.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {leads && leads.length > 0 ? (
+              <div className="space-y-3">
+                {leads.map((lead) => (
+                  <div
+                    key={lead.id}
+                    className="flex items-center justify-between rounded-lg border p-3"
+                  >
+                    <div>
+                      <p className="text-sm font-medium">{lead.resident_name}</p>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Clock className="h-3 w-3" />
+                      {formatDistanceToNow(new Date(lead.created_at), {
+                        addSuffix: true,
+                        locale: es,
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-lg border border-dashed bg-muted/50 p-8 text-center">
+                <Users className="mx-auto mb-2 h-8 w-8 text-muted-foreground/50" />
+                <p className="text-sm text-muted-foreground">
+                  Aún no hay vecinos interesados. ¡Completa tu perfil para atraer más clientes!
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
