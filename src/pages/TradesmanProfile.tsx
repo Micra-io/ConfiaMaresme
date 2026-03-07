@@ -119,6 +119,12 @@ const TradesmanProfile = () => {
               <h1 className="font-display text-3xl font-bold">{tradesman.full_name}</h1>
               <p className="mt-1 text-lg font-medium text-secondary">
                 {t(`categories.${tradesman.trade_category}`)}
+                {(tradesman as any).additional_categories?.length > 0 && (
+                  <span className="text-muted-foreground font-normal">
+                    {' · '}
+                    {(tradesman as any).additional_categories.map((c: string) => t(`categories.${c}`)).join(', ')}
+                  </span>
+                )}
               </p>
 
               {tradesman.location && (
