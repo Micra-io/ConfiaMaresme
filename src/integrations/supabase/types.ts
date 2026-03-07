@@ -14,7 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      tradesmen: {
+        Row: {
+          bio: string | null
+          created_at: string
+          full_name: string
+          id: string
+          is_available: boolean
+          is_claimed: boolean
+          location: string | null
+          profile_image_url: string | null
+          services: string[] | null
+          trade_category: Database["public"]["Enums"]["trade_category"]
+          updated_at: string
+          user_id: string | null
+          vetted_by_community: boolean
+          whatsapp_number: string | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          full_name: string
+          id?: string
+          is_available?: boolean
+          is_claimed?: boolean
+          location?: string | null
+          profile_image_url?: string | null
+          services?: string[] | null
+          trade_category?: Database["public"]["Enums"]["trade_category"]
+          updated_at?: string
+          user_id?: string | null
+          vetted_by_community?: boolean
+          whatsapp_number?: string | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          full_name?: string
+          id?: string
+          is_available?: boolean
+          is_claimed?: boolean
+          location?: string | null
+          profile_image_url?: string | null
+          services?: string[] | null
+          trade_category?: Database["public"]["Enums"]["trade_category"]
+          updated_at?: string
+          user_id?: string | null
+          vetted_by_community?: boolean
+          whatsapp_number?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +73,19 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      trade_category:
+        | "electrician"
+        | "plumber"
+        | "carpenter"
+        | "painter"
+        | "general_handyman"
+        | "locksmith"
+        | "gardener"
+        | "cleaner"
+        | "mason"
+        | "roofer"
+        | "hvac"
+        | "other"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +212,21 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      trade_category: [
+        "electrician",
+        "plumber",
+        "carpenter",
+        "painter",
+        "general_handyman",
+        "locksmith",
+        "gardener",
+        "cleaner",
+        "mason",
+        "roofer",
+        "hvac",
+        "other",
+      ],
+    },
   },
 } as const
