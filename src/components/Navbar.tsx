@@ -74,7 +74,7 @@ const Navbar = () => {
                   onClick={() => i18n.changeLanguage(lang.code)}
                   className={i18n.language === lang.code ? 'bg-accent' : ''}
                 >
-                  <span className="mr-2">{lang.flag}</span>
+                  <span className="mr-2">{lang.code === 'ca' ? <CatalanFlag /> : lang.flag}</span>
                   {lang.label}
                 </DropdownMenuItem>
               ))}
