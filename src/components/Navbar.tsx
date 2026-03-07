@@ -120,7 +120,7 @@ const Navbar = () => {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="gap-1">
                 <Globe className="h-4 w-4" />
-                <span className="text-xs">{currentLang.flag}</span>
+                {currentLang.code === 'ca' ? <CatalanFlag /> : <span className="text-xs">{currentLang.flag}</span>}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
