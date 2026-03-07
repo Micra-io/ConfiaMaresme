@@ -1,0 +1,119 @@
+{
+  "nav": {
+    "directory": "Directori",
+    "myProfile": "El meu perfil",
+    "signOut": "Sortir",
+    "signIn": "Accedir"
+  },
+  "hero": {
+    "title": "Professionals de confiança al Maresme",
+    "subtitle": "Troba electricistes, lampistes, fusters i més — tots verificats per la teva comunitat local.",
+    "searchPlaceholder": "Cercar per nom, ofici o ubicació..."
+  },
+  "categories": {
+    "title": "Cercar per ofici",
+    "all": "Tots",
+    "electrician": "Electricista",
+    "plumber": "Lampista",
+    "carpenter": "Fuster",
+    "painter": "Pintor",
+    "general_handyman": "Manetes",
+    "locksmith": "Serraller",
+    "gardener": "Jardiner",
+    "cleaner": "Neteja",
+    "mason": "Paleta",
+    "roofer": "Teulader",
+    "hvac": "Climatització",
+    "other": "Altre"
+  },
+  "card": {
+    "verified": "Verificat",
+    "available": "Disponible",
+    "unlockContact": "Desbloquejar contacte",
+    "unlocking": "Desbloquejant...",
+    "contactWhatsApp": "Contactar per WhatsApp"
+  },
+  "profile": {
+    "notFound": "Professional no trobat.",
+    "backToDirectory": "Tornar al directori",
+    "verifiedByCommunity": "Verificat per la comunitat",
+    "available": "Disponible",
+    "notAvailable": "No disponible",
+    "aboutMe": "Sobre mi",
+    "services": "Serveis",
+    "contactProtected": "La informació de contacte està protegida per als membres de la comunitat.",
+    "contactWhatsApp": "Contactar per WhatsApp"
+  },
+  "unlock": {
+    "title": "Comunitat protegida",
+    "description": "Per protegir els nostres professionals del spam i mantenir la comunitat local, cal que et registris com a veí del Maresme.",
+    "protectPros": "Protegim els professionals",
+    "protectProsDesc": "Sense spam ni trucades no desitjades",
+    "localCommunity": "Comunitat local verificada",
+    "localCommunityDesc": "Només veïns reals del Maresme",
+    "signUpResident": "Registrar-me com a veí",
+    "alreadyHaveAccount": "Ja tinc compte — Iniciar sessió",
+    "contactUnlocked": "Contacte desbloquejat!"
+  },
+  "auth": {
+    "residentSignup": "Registre de veí",
+    "signIn": "Iniciar sessió",
+    "createAccount": "Crear compte",
+    "residentDesc": "Uneix-te a la comunitat del Maresme per contactar professionals de confiança.",
+    "signInDesc": "Accedeix al teu compte",
+    "createAccountDesc": "Registra't per formar part de la comunitat",
+    "protectPros": "El teu registre ajuda a protegir els professionals del spam",
+    "directAccess": "Accedeix a contacte directe amb professionals verificats",
+    "email": "Correu electrònic",
+    "password": "Contrasenya",
+    "loading": "Carregant...",
+    "enter": "Entrar",
+    "register": "Registrar-se",
+    "noAccount": "No tens compte? Registra't",
+    "haveAccount": "Ja tens compte? Inicia sessió",
+    "welcome": "Benvingut!",
+    "accountCreated": "Compte creat. Revisa el teu correu per confirmar."
+  },
+  "dashboard": {
+    "title": "El meu perfil de professional",
+    "updateDesc": "Actualitza la teva informació perquè els clients et trobin.",
+    "createDesc": "Crea el teu perfil per aparèixer al directori.",
+    "profileInfo": "Informació del perfil",
+    "publicInfo": "Aquesta informació serà visible per al públic.",
+    "fullName": "Nom complet",
+    "trade": "Ofici",
+    "whatsapp": "WhatsApp (amb codi de país)",
+    "whatsappPlaceholder": "+34 612 345 678",
+    "location": "Ubicació",
+    "locationPlaceholder": "Ex: Mataró, Maresme",
+    "description": "Descripció",
+    "descriptionPlaceholder": "Explica a la comunitat sobre tu i la teva experiència...",
+    "services": "Serveis",
+    "servicePlaceholder": "Ex: Instal·lació elèctrica",
+    "addService": "Afegir",
+    "availableForWork": "Disponible per a treballs",
+    "availableDesc": "Mostra que estàs acceptant nous clients",
+    "saving": "Desant...",
+    "updateProfile": "Actualitzar perfil",
+    "createProfile": "Crear perfil",
+    "profileSaved": "Perfil desat correctament",
+    "neighborInterest": "Interès de veïns",
+    "neighborInterestDesc": "Veïns que han desbloquejat el teu contacte recentment.",
+    "noInterestYet": "Encara no hi ha veïns interessats. Completa el teu perfil per atraure més clients!",
+    "anonymousNeighbor": "Veí anònim",
+    "loading": "Carregant..."
+  },
+  "footer": {
+    "tagline": "Professionals verificats per la comunitat del Maresme i Barcelona.",
+    "rights": "Tots els drets reservats."
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Ups! Pàgina no trobada",
+    "backHome": "Tornar a l'inici"
+  },
+  "index": {
+    "noResults": "No s'han trobat professionals.",
+    "tryChangingFilters": "Intenta canviar els filtres o la cerca."
+  }
+}

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -12,6 +13,7 @@ import { ShieldCheck, Users } from 'lucide-react';
 const Auth = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const isResidentFlow = searchParams.get('role') === 'resident';
 
@@ -32,7 +34,7 @@ const Auth = () => {
       if (isLogin) {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        toast.success('¡Bienvenido!');
+        toast.success(t('auth.welcome'));
         navigate('/dashboard');
       } else {
         const { error } = await supabase.auth.signUp({
@@ -41,7 +43,7 @@ const Auth = () => {
           options: { emailRedirectTo: window.location.origin },
         });
         if (error) throw error;
-        toast.success('Cuenta creada. Revisa tu email para confirmar.');
+        toast.success(t('auth.accountCreated'));
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -56,17 +58,17 @@ const Auth = () => {
         <CardHeader className="text-center">
           <CardTitle className="font-display text-2xl">
             {isResidentFlow && !isLogin
-              ? 'Registro de vecino'
+              ? t('auth.residentSignup')
               : isLogin
-                ? 'Iniciar sesión'
-                : 'Crear cuenta'}
+                ? t('auth.signIn')
+                : t('auth.createAccount')}
           </CardTitle>
           <CardDescription>
             {isResidentFlow && !isLogin
-              ? 'Únete a la comunidad del Maresme para contactar profesionales de confianza.'
+              ? t('auth.residentDesc')
               : isLogin
-                ? 'Accede a tu cuenta'
-                : 'Regístrate para formar parte de la comunidad'}
+                ? t('auth.signInDesc')
+                : t('auth.createAccountDesc')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -74,22 +76,18 @@ const Auth = () => {
             <div className="mb-6 space-y-2">
               <div className="flex items-start gap-3 rounded-lg border bg-muted/50 p-3">
                 <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />
-                <p className="text-sm text-muted-foreground">
-                  Tu registro ayuda a proteger a los profesionales del spam
-                </p>
+                <p className="text-sm text-muted-foreground">{t('auth.protectPros')}</p>
               </div>
               <div className="flex items-start gap-3 rounded-lg border bg-muted/50 p-3">
                 <Users className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />
-                <p className="text-sm text-muted-foreground">
-                  Accede a contacto directo con profesionales verificados
-                </p>
+                <p className="text-sm text-muted-foreground">{t('auth.directAccess')}</p>
               </div>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('auth.email')}</Label>
               <Input
                 id="email"
                 type="email"
@@ -100,7 +98,7 @@ const Auth = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Contraseña</Label>
+              <Label htmlFor="password">{t('auth.password')}</Label>
               <Input
                 id="password"
                 type="password"
@@ -112,7 +110,7 @@ const Auth = () => {
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Cargando...' : isLogin ? 'Entrar' : 'Registrarse'}
+              {loading ? t('auth.loading') : isLogin ? t('auth.enter') : t('auth.register')}
             </Button>
           </form>
 
@@ -122,7 +120,7 @@ const Auth = () => {
               onClick={() => setIsLogin(!isLogin)}
               className="text-primary underline-offset-4 hover:underline"
             >
-              {isLogin ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia sesión'}
+              {isLogin ? t('auth.noAccount') : t('auth.haveAccount')}
             </button>
           </div>
         </CardContent>

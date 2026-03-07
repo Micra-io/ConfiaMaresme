@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -16,11 +17,17 @@ import { TRADE_CATEGORIES } from '@/lib/constants';
 import { X, Users, Clock } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { ca } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
+import { ru } from 'date-fns/locale';
+
+const dateFnsLocales: Record<string, typeof es> = { es, ca, en: enUS, ru };
 
 const Dashboard = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { t, i18n } = useTranslation();
 
   const [fullName, setFullName] = useState('');
   const [tradeCategory, setTradeCategory] = useState('general_handyman');
@@ -49,7 +56,6 @@ const Dashboard = () => {
     enabled: !!user,
   });
 
-  // Fetch leads (neighbor interest)
   const { data: leads } = useQuery({
     queryKey: ['my-leads', profile?.id],
     queryFn: async () => {
@@ -61,7 +67,6 @@ const Dashboard = () => {
         .limit(50);
       if (error) throw error;
 
-      // Fetch resident display names from profiles
       if (data && data.length > 0) {
         const residentIds = data.map((l) => l.resident_id);
         const { data: profiles } = await supabase
@@ -72,7 +77,7 @@ const Dashboard = () => {
         const profileMap = new Map(profiles?.map((p) => [p.id, p.display_name]) || []);
         return data.map((l) => ({
           ...l,
-          resident_name: profileMap.get(l.resident_id) || 'Vecino anónimo',
+          resident_name: profileMap.get(l.resident_id) || t('dashboard.anonymousNeighbor'),
         }));
       }
       return [];
@@ -118,7 +123,7 @@ const Dashboard = () => {
       }
     },
     onSuccess: () => {
-      toast.success('Perfil guardado correctamente');
+      toast.success(t('dashboard.profileSaved'));
       queryClient.invalidateQueries({ queryKey: ['my-profile'] });
     },
     onError: (err: any) => toast.error(err.message),
@@ -135,36 +140,36 @@ const Dashboard = () => {
   if (authLoading || profileLoading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <p className="text-muted-foreground">Cargando...</p>
+        <p className="text-muted-foreground">{t('dashboard.loading')}</p>
       </div>
     );
   }
 
   return (
     <div className="container mx-auto max-w-2xl px-4 py-10">
-      <h1 className="mb-2 font-display text-3xl font-bold">Mi Perfil de Profesional</h1>
+      <h1 className="mb-2 font-display text-3xl font-bold">{t('dashboard.title')}</h1>
       <p className="mb-8 text-muted-foreground">
-        {profile ? 'Actualiza tu información para que los clientes te encuentren.' : 'Crea tu perfil para aparecer en el directorio.'}
+        {profile ? t('dashboard.updateDesc') : t('dashboard.createDesc')}
       </p>
 
       <Card>
         <CardHeader>
-          <CardTitle>Información del perfil</CardTitle>
-          <CardDescription>Esta información será visible para el público.</CardDescription>
+          <CardTitle>{t('dashboard.profileInfo')}</CardTitle>
+          <CardDescription>{t('dashboard.publicInfo')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="fullName">Nombre completo *</Label>
+              <Label htmlFor="fullName">{t('dashboard.fullName')} *</Label>
               <Input id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
             </div>
             <div className="space-y-2">
-              <Label>Oficio *</Label>
+              <Label>{t('dashboard.trade')} *</Label>
               <Select value={tradeCategory} onValueChange={setTradeCategory}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {TRADE_CATEGORIES.map(c => (
-                    <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+                    <SelectItem key={c.value} value={c.value}>{t(`categories.${c.value}`)}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -173,30 +178,30 @@ const Dashboard = () => {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="whatsapp">WhatsApp (con código de país)</Label>
-              <Input id="whatsapp" value={whatsappNumber} onChange={(e) => setWhatsappNumber(e.target.value)} placeholder="+34 612 345 678" />
+              <Label htmlFor="whatsapp">{t('dashboard.whatsapp')}</Label>
+              <Input id="whatsapp" value={whatsappNumber} onChange={(e) => setWhatsappNumber(e.target.value)} placeholder={t('dashboard.whatsappPlaceholder')} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="location">Ubicación</Label>
-              <Input id="location" value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Ej: Mataró, Maresme" />
+              <Label htmlFor="location">{t('dashboard.location')}</Label>
+              <Input id="location" value={location} onChange={(e) => setLocation(e.target.value)} placeholder={t('dashboard.locationPlaceholder')} />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="bio">Descripción</Label>
-            <Textarea id="bio" value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Cuéntale a la comunidad sobre ti y tu experiencia..." rows={4} />
+            <Label htmlFor="bio">{t('dashboard.description')}</Label>
+            <Textarea id="bio" value={bio} onChange={(e) => setBio(e.target.value)} placeholder={t('dashboard.descriptionPlaceholder')} rows={4} />
           </div>
 
           <div className="space-y-2">
-            <Label>Servicios</Label>
+            <Label>{t('dashboard.services')}</Label>
             <div className="flex gap-2">
               <Input
                 value={newService}
                 onChange={(e) => setNewService(e.target.value)}
-                placeholder="Ej: Instalación eléctrica"
+                placeholder={t('dashboard.servicePlaceholder')}
                 onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addService())}
               />
-              <Button type="button" variant="outline" onClick={addService}>Añadir</Button>
+              <Button type="button" variant="outline" onClick={addService}>{t('dashboard.addService')}</Button>
             </div>
             {services.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-2">
@@ -214,8 +219,8 @@ const Dashboard = () => {
 
           <div className="flex items-center justify-between rounded-lg border p-4">
             <div>
-              <p className="font-medium">Disponible para trabajos</p>
-              <p className="text-sm text-muted-foreground">Muestra que estás aceptando nuevos clientes</p>
+              <p className="font-medium">{t('dashboard.availableForWork')}</p>
+              <p className="text-sm text-muted-foreground">{t('dashboard.availableDesc')}</p>
             </div>
             <Switch checked={isAvailable} onCheckedChange={setIsAvailable} />
           </div>
@@ -225,39 +230,31 @@ const Dashboard = () => {
             disabled={!fullName || saveMutation.isPending}
             className="w-full"
           >
-            {saveMutation.isPending ? 'Guardando...' : profile ? 'Actualizar perfil' : 'Crear perfil'}
+            {saveMutation.isPending ? t('dashboard.saving') : profile ? t('dashboard.updateProfile') : t('dashboard.createProfile')}
           </Button>
         </CardContent>
       </Card>
 
-      {/* Neighbor Interest Section */}
       {profile && (
         <Card className="mt-8">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5 text-primary" />
-              Interés de vecinos
+              {t('dashboard.neighborInterest')}
             </CardTitle>
-            <CardDescription>
-              Vecinos que han desbloqueado tu contacto recientemente.
-            </CardDescription>
+            <CardDescription>{t('dashboard.neighborInterestDesc')}</CardDescription>
           </CardHeader>
           <CardContent>
             {leads && leads.length > 0 ? (
               <div className="space-y-3">
                 {leads.map((lead) => (
-                  <div
-                    key={lead.id}
-                    className="flex items-center justify-between rounded-lg border p-3"
-                  >
-                    <div>
-                      <p className="text-sm font-medium">{lead.resident_name}</p>
-                    </div>
+                  <div key={lead.id} className="flex items-center justify-between rounded-lg border p-3">
+                    <p className="text-sm font-medium">{lead.resident_name}</p>
                     <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                       <Clock className="h-3 w-3" />
                       {formatDistanceToNow(new Date(lead.created_at), {
                         addSuffix: true,
-                        locale: es,
+                        locale: dateFnsLocales[i18n.language] || dateFnsLocales.es,
                       })}
                     </div>
                   </div>
@@ -266,9 +263,7 @@ const Dashboard = () => {
             ) : (
               <div className="rounded-lg border border-dashed bg-muted/50 p-8 text-center">
                 <Users className="mx-auto mb-2 h-8 w-8 text-muted-foreground/50" />
-                <p className="text-sm text-muted-foreground">
-                  Aún no hay vecinos interesados. ¡Completa tu perfil para atraer más clientes!
-                </p>
+                <p className="text-sm text-muted-foreground">{t('dashboard.noInterestYet')}</p>
               </div>
             )}
           </CardContent>

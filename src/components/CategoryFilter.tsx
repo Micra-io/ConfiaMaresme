@@ -1,5 +1,6 @@
 import { TRADE_CATEGORIES } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
 import { 
   Zap, Droplets, Hammer, Paintbrush, Wrench, KeyRound, 
   TreePine, Sparkles, BrickWall, Home, Wind, MoreHorizontal 
@@ -16,6 +17,8 @@ interface CategoryFilterProps {
 }
 
 const CategoryFilter = ({ selected, onSelect }: CategoryFilterProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-wrap gap-2">
       <Button
@@ -23,7 +26,7 @@ const CategoryFilter = ({ selected, onSelect }: CategoryFilterProps) => {
         size="sm"
         onClick={() => onSelect(null)}
       >
-        Todos
+        {t('categories.all')}
       </Button>
       {TRADE_CATEGORIES.map(cat => {
         const Icon = iconMap[cat.icon];
@@ -36,7 +39,7 @@ const CategoryFilter = ({ selected, onSelect }: CategoryFilterProps) => {
             className="gap-1.5"
           >
             {Icon && <Icon className="h-3.5 w-3.5" />}
-            {cat.label}
+            {t(`categories.${cat.value}`)}
           </Button>
         );
       })}

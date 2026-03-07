@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { MapPin, ShieldCheck, User, Lock, MessageCircle } from 'lucide-react';
-import { getCategoryLabel } from '@/lib/constants';
+import { useTranslation } from 'react-i18next';
 import { useUnlockContact } from '@/hooks/useUnlockContact';
 import UnlockContactModal from '@/components/UnlockContactModal';
 
@@ -22,6 +22,7 @@ interface TradesmanCardProps {
 }
 
 const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
+  const { t } = useTranslation();
   const { isUnlocked, isUnlocking, handleUnlock, showAuthModal, setShowAuthModal } =
     useUnlockContact(tradesman.id);
 
@@ -47,7 +48,7 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
                   {tradesman.full_name}
                 </h3>
                 <p className="text-sm font-medium text-secondary">
-                  {getCategoryLabel(tradesman.trade_category)}
+                  {t(`categories.${tradesman.trade_category}`)}
                 </p>
               </div>
             </div>
@@ -66,22 +67,21 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
             <div className="flex flex-wrap gap-2">
               {tradesman.vetted_by_community && (
                 <Badge className="gap-1 bg-success text-success-foreground">
-                  <ShieldCheck className="h-3 w-3" /> Verificado
+                  <ShieldCheck className="h-3 w-3" /> {t('card.verified')}
                 </Badge>
               )}
               {tradesman.is_available && (
                 <Badge variant="outline" className="text-secondary border-secondary">
-                  Disponible
+                  {t('card.available')}
                 </Badge>
               )}
             </div>
           </Link>
 
-          {/* Gated contact section */}
           {isUnlocked && whatsappLink ? (
             <a href={whatsappLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
               <Button size="sm" className="w-full gap-2 bg-success text-success-foreground hover:bg-success/90">
-                <MessageCircle className="h-4 w-4" /> Contactar por WhatsApp
+                <MessageCircle className="h-4 w-4" /> {t('card.contactWhatsApp')}
               </Button>
             </a>
           ) : (
@@ -96,7 +96,7 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
               disabled={isUnlocking}
             >
               <Lock className="h-4 w-4" />
-              {isUnlocking ? 'Desbloqueando...' : 'Desbloquear contacto'}
+              {isUnlocking ? t('card.unlocking') : t('card.unlockContact')}
             </Button>
           )}
         </CardContent>

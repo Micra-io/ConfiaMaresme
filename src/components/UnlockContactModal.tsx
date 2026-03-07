@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -16,6 +17,7 @@ interface UnlockContactModalProps {
 
 const UnlockContactModal = ({ open, onOpenChange }: UnlockContactModalProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -25,11 +27,10 @@ const UnlockContactModal = ({ open, onOpenChange }: UnlockContactModalProps) => 
             <Lock className="h-8 w-8 text-primary" />
           </div>
           <DialogTitle className="font-display text-2xl">
-            Comunidad protegida
+            {t('unlock.title')}
           </DialogTitle>
           <DialogDescription className="text-base leading-relaxed">
-            Para proteger a nuestros profesionales del spam y mantener la comunidad local,
-            necesitas registrarte como vecino del Maresme.
+            {t('unlock.description')}
           </DialogDescription>
         </DialogHeader>
 
@@ -37,15 +38,15 @@ const UnlockContactModal = ({ open, onOpenChange }: UnlockContactModalProps) => 
           <div className="flex items-start gap-3 rounded-lg border p-3">
             <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />
             <div>
-              <p className="text-sm font-medium">Protegemos a los profesionales</p>
-              <p className="text-xs text-muted-foreground">Sin spam ni llamadas no deseadas</p>
+              <p className="text-sm font-medium">{t('unlock.protectPros')}</p>
+              <p className="text-xs text-muted-foreground">{t('unlock.protectProsDesc')}</p>
             </div>
           </div>
           <div className="flex items-start gap-3 rounded-lg border p-3">
             <Users className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />
             <div>
-              <p className="text-sm font-medium">Comunidad local verificada</p>
-              <p className="text-xs text-muted-foreground">Solo vecinos reales del Maresme</p>
+              <p className="text-sm font-medium">{t('unlock.localCommunity')}</p>
+              <p className="text-xs text-muted-foreground">{t('unlock.localCommunityDesc')}</p>
             </div>
           </div>
         </div>
@@ -59,7 +60,7 @@ const UnlockContactModal = ({ open, onOpenChange }: UnlockContactModalProps) => 
               navigate('/auth?role=resident');
             }}
           >
-            Registrarme como vecino
+            {t('unlock.signUpResident')}
           </Button>
           <Button
             variant="ghost"
@@ -69,7 +70,7 @@ const UnlockContactModal = ({ open, onOpenChange }: UnlockContactModalProps) => 
               navigate('/auth');
             }}
           >
-            Ya tengo cuenta — Iniciar sesión
+            {t('unlock.alreadyHaveAccount')}
           </Button>
         </div>
       </DialogContent>
