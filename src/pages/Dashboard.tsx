@@ -38,9 +38,7 @@ const Dashboard = () => {
   const [services, setServices] = useState<string[]>([]);
   const [newService, setNewService] = useState('');
 
-  useEffect(() => {
-    if (!authLoading && !user) navigate('/auth');
-  }, [authLoading, user, navigate]);
+  // Auth is handled by ProtectedRoute wrapper
 
   const { data: profile, isLoading: profileLoading } = useQuery({
     queryKey: ['my-profile', user?.id],
