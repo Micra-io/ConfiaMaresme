@@ -13,9 +13,19 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-const UI_LANGUAGES = [
+const CatalanFlag = () => (
+  <svg width="20" height="14" viewBox="0 0 20 14" className="inline-block rounded-sm">
+    <rect width="20" height="14" fill="#FCDD09" />
+    <rect y="1.56" width="20" height="1.56" fill="#DA121A" />
+    <rect y="4.67" width="20" height="1.56" fill="#DA121A" />
+    <rect y="7.78" width="20" height="1.56" fill="#DA121A" />
+    <rect y="10.89" width="20" height="1.56" fill="#DA121A" />
+  </svg>
+);
+
+const UI_LANGUAGES: { code: string; label: string; flag: string | null }[] = [
   { code: 'es', label: 'Español', flag: '🇪🇸' },
-  { code: 'ca', label: 'Català', flag: '🏴󠁥󠁳󠁣󠁴󠁿' },
+  { code: 'ca', label: 'Català', flag: null },
   { code: 'en', label: 'English', flag: '🇬🇧' },
   { code: 'ru', label: 'Русский', flag: '🇷🇺' },
 ];
