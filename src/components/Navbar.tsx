@@ -58,7 +58,7 @@ const Navbar = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {LANGUAGES.map((lang) => (
+              {UI_LANGUAGES.map((lang) => (
                 <DropdownMenuItem
                   key={lang.code}
                   onClick={() => i18n.changeLanguage(lang.code)}
