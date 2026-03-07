@@ -67,8 +67,8 @@ const Navbar = () => {
                   <User className="h-4 w-4 shrink-0" /> {t('nav.myProfile')}
                 </Button>
               </Link>
-              <Button variant="outline" size="sm" onClick={signOut} className="gap-2">
-                <LogOut className="h-4 w-4" /> {t('nav.signOut')}
+              <Button variant="outline" size="sm" onClick={signOut} className="gap-2 whitespace-nowrap">
+                <LogOut className="h-4 w-4 shrink-0" /> {t('nav.signOut')}
               </Button>
             </>
           ) : (
