@@ -27,15 +27,15 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-md">
-      <div className="container mx-auto flex items-center justify-between px-4 py-3">
-        <Link to="/" className="flex items-center gap-2">
+      <div className="container mx-auto flex items-center justify-between gap-2 px-4 py-3">
+        <Link to="/" className="flex shrink-0 items-center gap-2">
           <span className="font-display text-xl font-bold text-primary">Confia</span>
           <span className="font-display text-xl font-bold text-secondary">Maresme</span>
         </Link>
 
         {/* Desktop */}
-        <div className="hidden items-center gap-4 md:flex">
-          <Link to="/" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+        <div className="hidden items-center gap-3 md:flex">
+          <Link to="/" className="whitespace-nowrap text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
             {t('nav.directory')}
           </Link>
 
@@ -63,12 +63,12 @@ const Navbar = () => {
           {user ? (
             <>
               <Link to="/dashboard">
-                <Button variant="ghost" size="sm" className="gap-2">
-                  <User className="h-4 w-4" /> {t('nav.myProfile')}
+                <Button variant="ghost" size="sm" className="gap-2 whitespace-nowrap">
+                  <User className="h-4 w-4 shrink-0" /> {t('nav.myProfile')}
                 </Button>
               </Link>
-              <Button variant="outline" size="sm" onClick={signOut} className="gap-2">
-                <LogOut className="h-4 w-4" /> {t('nav.signOut')}
+              <Button variant="outline" size="sm" onClick={signOut} className="gap-2 whitespace-nowrap">
+                <LogOut className="h-4 w-4 shrink-0" /> {t('nav.signOut')}
               </Button>
             </>
           ) : (
