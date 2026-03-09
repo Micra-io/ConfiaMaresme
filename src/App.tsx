@@ -11,12 +11,14 @@ import SEOHead from "@/components/SEOHead";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import AdminRoute from "@/components/AdminRoute";
 import ReviewPromptWrapper from "@/components/ReviewPromptWrapper";
 import Index from "./pages/Index";
 import TradesmanProfile from "./pages/TradesmanProfile";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import ClaimProfile from "./pages/ClaimProfile";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
