@@ -100,6 +100,11 @@ const Navbar = () => {
                 <DropdownMenuItem onClick={() => navigate('/dashboard')}>
                   {dashboardLabel}
                 </DropdownMenuItem>
+                {isAdmin && (
+                  <DropdownMenuItem onClick={() => navigate('/admin')} className="gap-1.5">
+                    <ShieldCheck className="h-3.5 w-3.5" /> Admin Dashboard
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
                   {t('nav.signOut')}
