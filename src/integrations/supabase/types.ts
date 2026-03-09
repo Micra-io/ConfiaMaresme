@@ -48,18 +48,24 @@ export type Database = {
           created_at: string
           display_name: string | null
           id: string
+          is_admin: boolean
+          is_blocked: boolean
           user_role: Database["public"]["Enums"]["user_role"]
         }
         Insert: {
           created_at?: string
           display_name?: string | null
           id: string
+          is_admin?: boolean
+          is_blocked?: boolean
           user_role?: Database["public"]["Enums"]["user_role"]
         }
         Update: {
           created_at?: string
           display_name?: string | null
           id?: string
+          is_admin?: boolean
+          is_blocked?: boolean
           user_role?: Database["public"]["Enums"]["user_role"]
         }
         Relationships: []
@@ -177,6 +183,8 @@ export type Database = {
         Args: { _phone: string; _user_id: string }
         Returns: string
       }
+      is_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_blocked: { Args: { _user_id: string }; Returns: boolean }
       is_tradesman_owner: { Args: { _tradesman_id: string }; Returns: boolean }
     }
     Enums: {

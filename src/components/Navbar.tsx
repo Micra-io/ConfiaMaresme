@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Globe, Menu, X } from 'lucide-react';
+import { Globe, Menu, X, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 import {
   DropdownMenu,
@@ -31,7 +31,7 @@ const UI_LANGUAGES: { code: string; label: string; flag: string | null }[] = [
 ];
 
 const Navbar = () => {
-  const { user, userRole, signOut } = useAuth();
+  const { user, userRole, isAdmin, signOut } = useAuth();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -100,6 +100,11 @@ const Navbar = () => {
                 <DropdownMenuItem onClick={() => navigate('/dashboard')}>
                   {dashboardLabel}
                 </DropdownMenuItem>
+                {isAdmin && (
+                  <DropdownMenuItem onClick={() => navigate('/admin')} className="gap-1.5">
+                    <ShieldCheck className="h-3.5 w-3.5" /> Admin Dashboard
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
                   {t('nav.signOut')}
@@ -155,6 +160,11 @@ const Navbar = () => {
                   <span className="truncate text-sm text-muted-foreground">{user.email}</span>
                 </div>
                 <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="text-sm font-medium">{dashboardLabel}</Link>
+                {isAdmin && (
+                  <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-1.5 text-sm font-medium">
+                    <ShieldCheck className="h-3.5 w-3.5" /> Admin Dashboard
+                  </Link>
+                )}
                 <button onClick={() => { handleSignOut(); setMobileOpen(false); }} className="text-left text-sm font-medium text-destructive">{t('nav.signOut')}</button>
               </>
             ) : (
