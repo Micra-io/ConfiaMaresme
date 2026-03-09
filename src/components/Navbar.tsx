@@ -160,6 +160,11 @@ const Navbar = () => {
                   <span className="truncate text-sm text-muted-foreground">{user.email}</span>
                 </div>
                 <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="text-sm font-medium">{dashboardLabel}</Link>
+                {isAdmin && (
+                  <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-1.5 text-sm font-medium">
+                    <ShieldCheck className="h-3.5 w-3.5" /> Admin Dashboard
+                  </Link>
+                )}
                 <button onClick={() => { handleSignOut(); setMobileOpen(false); }} className="text-left text-sm font-medium text-destructive">{t('nav.signOut')}</button>
               </>
             ) : (
