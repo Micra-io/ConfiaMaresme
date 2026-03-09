@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Globe, Menu, X } from 'lucide-react';
+import { Globe, Menu, X, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 import {
   DropdownMenu,
