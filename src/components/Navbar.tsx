@@ -31,7 +31,7 @@ const UI_LANGUAGES: { code: string; label: string; flag: string | null }[] = [
 ];
 
 const Navbar = () => {
-  const { user, userRole, signOut } = useAuth();
+  const { user, userRole, isAdmin, signOut } = useAuth();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
