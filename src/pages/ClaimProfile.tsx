@@ -84,7 +84,7 @@ const ClaimProfile = () => {
       if (error) throw error;
 
       if (signUpData.user) {
-        await handleClaim(signUpData.user.id);
+        await handleClaim();
       }
     } catch (err: any) {
       toast.error(err.message);
