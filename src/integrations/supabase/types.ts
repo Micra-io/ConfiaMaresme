@@ -179,10 +179,9 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      claim_tradesman_profile: {
-        Args: { _phone: string; _user_id: string }
-        Returns: string
-      }
+      claim_tradesman_profile:
+        | { Args: { _phone: string }; Returns: string }
+        | { Args: { _phone: string; _user_id: string }; Returns: string }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
       is_blocked: { Args: { _user_id: string }; Returns: boolean }
       is_tradesman_owner: { Args: { _tradesman_id: string }; Returns: boolean }
