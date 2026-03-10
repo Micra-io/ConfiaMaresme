@@ -56,8 +56,7 @@ const ClaimProfile = () => {
     setLoading(true);
     const { data, error } = await supabase.rpc('claim_tradesman_profile', {
       _phone: phone,
-      _user_id: userId,
-    });
+    } as any);
 
     if (error) {
       toast.error(error.message);
