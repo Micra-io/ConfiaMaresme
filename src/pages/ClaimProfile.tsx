@@ -44,7 +44,7 @@ const ClaimProfile = () => {
     } else {
       setClaimedName(data.full_name);
       if (user) {
-        await handleClaim(user.id);
+        await handleClaim();
       } else {
         setStep('signup');
       }
