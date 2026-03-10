@@ -52,7 +52,7 @@ const ClaimProfile = () => {
     setLoading(false);
   };
 
-  const handleClaim = async (userId: string) => {
+  const handleClaim = async () => {
     setLoading(true);
     const { data, error } = await supabase.rpc('claim_tradesman_profile', {
       _phone: phone,
