@@ -27,7 +27,7 @@ const ClaimProfile = () => {
   // If user is already logged in, try claiming directly
   useEffect(() => {
     if (user && phoneFromUrl && step === 'check') {
-      handleClaim(user.id);
+      handleClaim();
     }
   }, [user, phoneFromUrl]);
 
