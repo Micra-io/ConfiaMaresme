@@ -27,7 +27,7 @@ const ClaimProfile = () => {
   // If user is already logged in, try claiming directly
   useEffect(() => {
     if (user && phoneFromUrl && step === 'check') {
-      handleClaim(user.id);
+      handleClaim();
     }
   }, [user, phoneFromUrl]);
 
@@ -44,7 +44,7 @@ const ClaimProfile = () => {
     } else {
       setClaimedName(data.full_name);
       if (user) {
-        await handleClaim(user.id);
+        await handleClaim();
       } else {
         setStep('signup');
       }
@@ -52,12 +52,11 @@ const ClaimProfile = () => {
     setLoading(false);
   };
 
-  const handleClaim = async (userId: string) => {
+  const handleClaim = async () => {
     setLoading(true);
     const { data, error } = await supabase.rpc('claim_tradesman_profile', {
       _phone: phone,
-      _user_id: userId,
-    });
+    } as any);
 
     if (error) {
       toast.error(error.message);
@@ -85,7 +84,7 @@ const ClaimProfile = () => {
       if (error) throw error;
 
       if (signUpData.user) {
-        await handleClaim(signUpData.user.id);
+        await handleClaim();
       }
     } catch (err: any) {
       toast.error(err.message);
