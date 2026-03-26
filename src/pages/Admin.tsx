@@ -61,11 +61,17 @@ const Admin = () => {
         </Card>
       </div>
 
-      <Tabs defaultValue="users">
+      <Tabs defaultValue="leads">
         <TabsList className="mb-4">
-          <TabsTrigger value="users">User Management</TabsTrigger>
+          <TabsTrigger value="leads" className="gap-1.5">
+            <Inbox className="h-4 w-4" /> Scraped Leads
+          </TabsTrigger>
           <TabsTrigger value="listings">Listing Management</TabsTrigger>
+          <TabsTrigger value="users">User Management</TabsTrigger>
         </TabsList>
+        <TabsContent value="leads">
+          <AdminTradesmanLeads />
+        </TabsContent>
         <TabsContent value="users">
           <AdminUsers />
         </TabsContent>
