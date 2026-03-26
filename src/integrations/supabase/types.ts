@@ -105,6 +105,77 @@ export type Database = {
           },
         ]
       }
+      tradesman_leads: {
+        Row: {
+          admin_notes: string | null
+          approved_tradesman_id: string | null
+          clean_bio: string | null
+          clean_location: string | null
+          clean_name: string | null
+          created_at: string
+          id: string
+          raw_bio: string | null
+          raw_languages: string[]
+          raw_location: string | null
+          raw_name: string
+          raw_phone: string | null
+          raw_trade: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          source: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          approved_tradesman_id?: string | null
+          clean_bio?: string | null
+          clean_location?: string | null
+          clean_name?: string | null
+          created_at?: string
+          id?: string
+          raw_bio?: string | null
+          raw_languages?: string[]
+          raw_location?: string | null
+          raw_name: string
+          raw_phone?: string | null
+          raw_trade?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          approved_tradesman_id?: string | null
+          clean_bio?: string | null
+          clean_location?: string | null
+          clean_name?: string | null
+          created_at?: string
+          id?: string
+          raw_bio?: string | null
+          raw_languages?: string[]
+          raw_location?: string | null
+          raw_name?: string
+          raw_phone?: string | null
+          raw_trade?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tradesman_leads_approved_tradesman_id_fkey"
+            columns: ["approved_tradesman_id"]
+            isOneToOne: false
+            referencedRelation: "tradesmen"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tradesmen: {
         Row: {
           additional_categories: string[]
