@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Wrench, Star } from 'lucide-react';
+import { Users, Wrench, Star, Inbox } from 'lucide-react';
 import AdminUsers from '@/components/admin/AdminUsers';
 import AdminListings from '@/components/admin/AdminListings';
+import AdminTradesmanLeads from '@/components/admin/AdminTradesmanLeads';
 
 const Admin = () => {
   const [stats, setStats] = useState({ users: 0, listings: 0, reviews: 0 });
