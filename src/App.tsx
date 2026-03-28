@@ -66,6 +66,7 @@ const App = () => (
         </DemoModeProvider>
       </AuthProvider>
     </QueryClientProvider>
+    <Analytics />
   </HelmetProvider>
 );
 
