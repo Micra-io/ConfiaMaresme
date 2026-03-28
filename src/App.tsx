@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "@/hooks/useAuth";
 import { DemoModeProvider } from "@/hooks/useDemoMode";
+import { Analytics } from '@vercel/analytics/react';
 import '@/i18n';
 import SEOHead from "@/components/SEOHead";
 import Navbar from "@/components/Navbar";
