@@ -73,7 +73,7 @@ const tradeCategories = Constants.public.Enums.trade_category;
 const AdminTradesmanLeads = ({ refreshKey }: { refreshKey?: number }) => {
   const [leads, setLeads] = useState<TradesmanLead[]>([]);
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('pending');
+  const [statusFilter, setStatusFilter] = useState<string>('opted_in');
   const [loading, setLoading] = useState(true);
   const [reviewLead, setReviewLead] = useState<TradesmanLead | null>(null);
   const [approving, setApproving] = useState(false);
@@ -198,6 +198,9 @@ const AdminTradesmanLeads = ({ refreshKey }: { refreshKey?: number }) => {
 
   const statusColor: Record<string, string> = {
     pending: 'bg-amber-500/15 text-amber-700 border-amber-200',
+    contacted: 'bg-blue-500/15 text-blue-700 border-blue-200',
+    opted_in: 'bg-emerald-500/15 text-emerald-700 border-emerald-200',
+    opted_out: 'bg-slate-500/15 text-slate-700 border-slate-200',
     approved: 'bg-emerald-500/15 text-emerald-700 border-emerald-200',
     rejected: 'bg-red-500/15 text-red-700 border-red-200',
     duplicate: 'bg-slate-500/15 text-slate-700 border-slate-200',
@@ -230,6 +233,9 @@ const AdminTradesmanLeads = ({ refreshKey }: { refreshKey?: number }) => {
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
                 <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="contacted">Contacted</SelectItem>
+                <SelectItem value="opted_in">Opted In ✅</SelectItem>
+                <SelectItem value="opted_out">Opted Out</SelectItem>
                 <SelectItem value="approved">Approved</SelectItem>
                 <SelectItem value="rejected">Rejected</SelectItem>
                 <SelectItem value="duplicate">Duplicate</SelectItem>
@@ -284,9 +290,10 @@ const AdminTradesmanLeads = ({ refreshKey }: { refreshKey?: number }) => {
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-1">
-                            {(l.status === 'pending' || l.status === 'rejected') && (
+                            {(l.status === 'pending' || l.status === 'rejected' || l.status === 'opted_in' || l.status === 'contacted') && (
                               <Button variant="outline" size="sm" onClick={() => openReview(l)}>
-                                <Eye className="mr-1 h-3.5 w-3.5" /> Review
+                                <Eye className="mr-1 h-3.5 w-3.5" />
+                                {l.status === 'opted_in' ? 'Approve' : 'Review'}
                               </Button>
                             )}
                             {l.status === 'approved' && (
