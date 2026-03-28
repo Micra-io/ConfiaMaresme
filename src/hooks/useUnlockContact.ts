@@ -14,7 +14,7 @@ export const useUnlockContact = (tradesmanId: string) => {
     queryKey: ['lead-unlock', tradesmanId, user?.id],
     queryFn: async () => {
       const { data } = await supabase
-        .from('leads')
+        .from('contact_unlocks')
         .select('id')
         .eq('tradesman_id', tradesmanId)
         .eq('resident_id', user!.id)
@@ -26,7 +26,7 @@ export const useUnlockContact = (tradesmanId: string) => {
 
   const unlockMutation = useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.from('leads').insert({
+      const { error } = await supabase.from('contact_unlocks').insert({
         tradesman_id: tradesmanId,
         resident_id: user!.id,
       });
