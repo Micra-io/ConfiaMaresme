@@ -70,7 +70,7 @@ function hasNonLatin(text: string): boolean {
 
 const tradeCategories = Constants.public.Enums.trade_category;
 
-const AdminTradesmanLeads = () => {
+const AdminTradesmanLeads = ({ refreshKey }: { refreshKey?: number }) => {
   const [leads, setLeads] = useState<TradesmanLead[]>([]);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('pending');
@@ -103,7 +103,7 @@ const AdminTradesmanLeads = () => {
     setLoading(false);
   };
 
-  useEffect(() => { fetchLeads(); }, [statusFilter]);
+  useEffect(() => { fetchLeads(); }, [statusFilter, refreshKey]);
 
   const openReview = (lead: TradesmanLead) => {
     setReviewLead(lead);
@@ -284,9 +284,14 @@ const AdminTradesmanLeads = () => {
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-1">
-                            {l.status === 'pending' && (
+                            {(l.status === 'pending' || l.status === 'rejected') && (
                               <Button variant="outline" size="sm" onClick={() => openReview(l)}>
                                 <Eye className="mr-1 h-3.5 w-3.5" /> Review
+                              </Button>
+                            )}
+                            {l.status === 'approved' && (
+                              <Button variant="outline" size="sm" onClick={() => openReview(l)}>
+                                <Eye className="mr-1 h-3.5 w-3.5" /> Re-review
                               </Button>
                             )}
                             <AlertDialog>
