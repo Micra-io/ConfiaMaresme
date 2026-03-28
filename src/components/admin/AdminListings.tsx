@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, EyeOff, Trash2 } from 'lucide-react';
+import { Search, EyeOff, Trash2, ArrowDownToLine, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   AlertDialog,
@@ -24,6 +24,9 @@ interface Tradesman {
   full_name: string;
   trade_category: string;
   location: string | null;
+  bio: string | null;
+  whatsapp_number: string | null;
+  languages: string[];
   is_available: boolean;
   is_claimed: boolean;
   vetted_by_community: boolean;
@@ -31,16 +34,17 @@ interface Tradesman {
   created_at: string;
 }
 
-const AdminListings = () => {
+const AdminListings = ({ onDemoted }: { onDemoted?: () => void }) => {
   const [listings, setListings] = useState<Tradesman[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [demotingId, setDemotingId] = useState<string | null>(null);
 
   const fetchListings = async () => {
     setLoading(true);
     const { data, error } = await supabase
       .from('tradesmen')
-      .select('id, full_name, trade_category, location, is_available, is_claimed, vetted_by_community, view_count, created_at')
+      .select('id, full_name, trade_category, location, bio, whatsapp_number, languages, is_available, is_claimed, vetted_by_community, view_count, created_at')
       .order('created_at', { ascending: false });
 
     if (!error && data) {
@@ -65,6 +69,53 @@ const AdminListings = () => {
     }
   };
 
+  const demoteToLead = async (listing: Tradesman) => {
+    setDemotingId(listing.id);
+    try {
+      // 1. Create a lead entry from this tradesman
+      const { error: insertError } = await supabase
+        .from('tradesman_leads')
+        .insert({
+          raw_name: listing.full_name,
+          clean_name: listing.full_name,
+          raw_phone: listing.whatsapp_number,
+          raw_bio: listing.bio,
+          clean_bio: listing.bio,
+          raw_location: listing.location,
+          clean_location: listing.location,
+          raw_trade: listing.trade_category,
+          raw_languages: listing.languages || [],
+          source: 'demoted',
+          status: 'pending',
+          admin_notes: `Demoted from tradesmen directory on ${new Date().toLocaleDateString()}`,
+        } as any);
+
+      if (insertError) throw insertError;
+
+      // 2. Update any tradesman_leads that reference this tradesman
+      await supabase
+        .from('tradesman_leads')
+        .update({ status: 'pending', approved_tradesman_id: null } as any)
+        .eq('approved_tradesman_id', listing.id);
+
+      // 3. Delete the tradesman record
+      const { error: deleteError } = await supabase
+        .from('tradesmen')
+        .delete()
+        .eq('id', listing.id);
+
+      if (deleteError) throw deleteError;
+
+      toast.success(`"${listing.full_name}" demoted back to leads for re-review`);
+      fetchListings();
+      onDemoted?.();
+    } catch (err: any) {
+      toast.error('Demotion failed: ' + err.message);
+    } finally {
+      setDemotingId(null);
+    }
+  };
+
   const deleteListing = async (id: string) => {
     const { error } = await supabase.from('tradesmen').delete().eq('id', id);
     if (error) {
@@ -85,7 +136,7 @@ const AdminListings = () => {
     <Card>
       <CardHeader>
         <CardTitle>Tradesman Listings</CardTitle>
-        <CardDescription>Manage directory listings. Hide spam or delete fake profiles.</CardDescription>
+        <CardDescription>Manage directory listings. Hide, demote back to leads, or delete.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="mb-4 flex items-center gap-2">
@@ -153,6 +204,42 @@ const AdminListings = () => {
                             <EyeOff className="mr-1 h-3.5 w-3.5" />
                             {l.is_available ? 'Hide' : 'Show'}
                           </Button>
+
+                          {/* Demote to Lead */}
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-amber-600 hover:text-amber-700"
+                                disabled={demotingId === l.id}
+                              >
+                                {demotingId === l.id ? (
+                                  <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
+                                ) : (
+                                  <ArrowDownToLine className="mr-1 h-3.5 w-3.5" />
+                                )}
+                                Demote
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Demote to lead?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This will remove "{l.full_name}" from the public directory and create a new lead for re-review. {l.is_claimed && 'Warning: this tradesman has claimed their profile — their account link will be broken.'}
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => demoteToLead(l)}
+                                  className="bg-amber-600 text-white hover:bg-amber-700"
+                                >
+                                  Demote to Lead
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
 
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
