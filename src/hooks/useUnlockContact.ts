@@ -14,7 +14,7 @@ export const useUnlockContact = (tradesmanId: string) => {
     queryKey: ['lead-unlock', tradesmanId, user?.id],
     queryFn: async () => {
       const { data } = await supabase
-        .from('leads')
+        .from('contact_unlocks')
         .select('id')
         .eq('tradesman_id', tradesmanId)
         .eq('resident_id', user!.id)
