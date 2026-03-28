@@ -284,9 +284,14 @@ const AdminTradesmanLeads = ({ refreshKey }: { refreshKey?: number }) => {
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-1">
-                            {l.status === 'pending' && (
+                            {(l.status === 'pending' || l.status === 'rejected') && (
                               <Button variant="outline" size="sm" onClick={() => openReview(l)}>
                                 <Eye className="mr-1 h-3.5 w-3.5" /> Review
+                              </Button>
+                            )}
+                            {l.status === 'approved' && (
+                              <Button variant="outline" size="sm" onClick={() => openReview(l)}>
+                                <Eye className="mr-1 h-3.5 w-3.5" /> Re-review
                               </Button>
                             )}
                             <AlertDialog>

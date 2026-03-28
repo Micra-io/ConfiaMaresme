@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,6 +9,7 @@ import AdminTradesmanLeads from '@/components/admin/AdminTradesmanLeads';
 
 const Admin = () => {
   const [stats, setStats] = useState({ users: 0, listings: 0, reviews: 0 });
+  const [leadsRefreshKey, setLeadsRefreshKey] = useState(0);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -24,6 +25,10 @@ const Admin = () => {
       });
     };
     fetchStats();
+  }, []);
+
+  const handleDemoted = useCallback(() => {
+    setLeadsRefreshKey(k => k + 1);
   }, []);
 
   return (
@@ -70,13 +75,13 @@ const Admin = () => {
           <TabsTrigger value="users">User Management</TabsTrigger>
         </TabsList>
         <TabsContent value="leads">
-          <AdminTradesmanLeads />
+          <AdminTradesmanLeads refreshKey={leadsRefreshKey} />
         </TabsContent>
         <TabsContent value="users">
           <AdminUsers />
         </TabsContent>
         <TabsContent value="listings">
-          <AdminListings />
+          <AdminListings onDemoted={handleDemoted} />
         </TabsContent>
       </Tabs>
     </div>
