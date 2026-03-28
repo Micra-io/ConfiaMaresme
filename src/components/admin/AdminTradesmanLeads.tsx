@@ -73,7 +73,7 @@ const tradeCategories = Constants.public.Enums.trade_category;
 const AdminTradesmanLeads = ({ refreshKey }: { refreshKey?: number }) => {
   const [leads, setLeads] = useState<TradesmanLead[]>([]);
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('pending');
+  const [statusFilter, setStatusFilter] = useState<string>('opted_in');
   const [loading, setLoading] = useState(true);
   const [reviewLead, setReviewLead] = useState<TradesmanLead | null>(null);
   const [approving, setApproving] = useState(false);
