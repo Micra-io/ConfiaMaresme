@@ -233,6 +233,9 @@ const AdminTradesmanLeads = ({ refreshKey }: { refreshKey?: number }) => {
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
                 <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="contacted">Contacted</SelectItem>
+                <SelectItem value="opted_in">Opted In ✅</SelectItem>
+                <SelectItem value="opted_out">Opted Out</SelectItem>
                 <SelectItem value="approved">Approved</SelectItem>
                 <SelectItem value="rejected">Rejected</SelectItem>
                 <SelectItem value="duplicate">Duplicate</SelectItem>
