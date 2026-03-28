@@ -67,11 +67,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
+    let initialFetchDone = false;
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setLoading(false);
       if (session?.user) {
-        setTimeout(() => fetchProfile(session.user.id), 0);
+        // Skip if getSession already handled the initial fetch
+        if (initialFetchDone) {
+          setTimeout(() => fetchProfile(session.user.id), 0);
+        }
       } else {
         setUserRole(null);
         setIsAdmin(false);
@@ -87,6 +92,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } else {
         setProfileLoading(false);
       }
+      initialFetchDone = true;
     });
 
     return () => subscription.unsubscribe();
