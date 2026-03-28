@@ -17,7 +17,7 @@ export const useReviewPrompt = () => {
 
       // Get leads older than 24h
       const { data: leads, error: leadsError } = await supabase
-        .from('leads')
+        .from('contact_unlocks')
         .select('tradesman_id, created_at')
         .eq('resident_id', user!.id)
         .lte('created_at', twentyFourHoursAgo)
