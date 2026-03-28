@@ -198,6 +198,9 @@ const AdminTradesmanLeads = ({ refreshKey }: { refreshKey?: number }) => {
 
   const statusColor: Record<string, string> = {
     pending: 'bg-amber-500/15 text-amber-700 border-amber-200',
+    contacted: 'bg-blue-500/15 text-blue-700 border-blue-200',
+    opted_in: 'bg-emerald-500/15 text-emerald-700 border-emerald-200',
+    opted_out: 'bg-slate-500/15 text-slate-700 border-slate-200',
     approved: 'bg-emerald-500/15 text-emerald-700 border-emerald-200',
     rejected: 'bg-red-500/15 text-red-700 border-red-200',
     duplicate: 'bg-slate-500/15 text-slate-700 border-slate-200',
