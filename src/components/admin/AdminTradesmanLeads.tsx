@@ -103,7 +103,7 @@ const AdminTradesmanLeads = ({ refreshKey }: { refreshKey?: number }) => {
     setLoading(false);
   };
 
-  useEffect(() => { fetchLeads(); }, [statusFilter]);
+  useEffect(() => { fetchLeads(); }, [statusFilter, refreshKey]);
 
   const openReview = (lead: TradesmanLead) => {
     setReviewLead(lead);
