@@ -35,39 +35,48 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchProfile = async (userId: string) => {
     setProfileLoading(true);
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .maybeSingle();
+    try {
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .maybeSingle();
 
-    if (data) {
-      const profile = data as any;
+      if (data) {
+        const profile = data as any;
 
-      // If user is blocked, sign them out immediately
-      if (profile.is_blocked) {
-        await supabase.auth.signOut();
+        // If user is blocked, sign them out immediately
+        if (profile.is_blocked) {
+          await supabase.auth.signOut();
+          setUserRole(null);
+          setIsAdmin(false);
+          setProfileLoading(false);
+          return;
+        }
+
+        setUserRole((profile.user_role as UserRole) ?? null);
+        setIsAdmin(!!profile.is_admin);
+      } else {
         setUserRole(null);
         setIsAdmin(false);
-        setProfileLoading(false);
-        return;
       }
-
-      setUserRole((profile.user_role as UserRole) ?? null);
-      setIsAdmin(!!profile.is_admin);
-    } else {
-      setUserRole(null);
-      setIsAdmin(false);
+    } catch {
+      // Keep existing values on error to avoid flashing redirects
     }
     setProfileLoading(false);
   };
 
   useEffect(() => {
+    let initialFetchDone = false;
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setLoading(false);
       if (session?.user) {
-        setTimeout(() => fetchProfile(session.user.id), 0);
+        // Skip if getSession already handled the initial fetch
+        if (initialFetchDone) {
+          setTimeout(() => fetchProfile(session.user.id), 0);
+        }
       } else {
         setUserRole(null);
         setIsAdmin(false);
@@ -83,6 +92,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } else {
         setProfileLoading(false);
       }
+      initialFetchDone = true;
     });
 
     return () => subscription.unsubscribe();
