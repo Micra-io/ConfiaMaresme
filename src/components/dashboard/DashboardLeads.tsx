@@ -31,7 +31,7 @@ const DashboardLeads = () => {
     queryKey: ['my-leads', profile?.id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('leads')
+        .from('contact_unlocks')
         .select('id, created_at, resident_id')
         .eq('tradesman_id', profile!.id)
         .order('created_at', { ascending: false })

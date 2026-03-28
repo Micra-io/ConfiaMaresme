@@ -14,7 +14,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      leads: {
+      contact_unlocks: {
         Row: {
           created_at: string
           id: string
@@ -35,7 +35,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "leads_tradesman_id_fkey"
+            foreignKeyName: "contact_unlocks_tradesman_id_fkey"
             columns: ["tradesman_id"]
             isOneToOne: false
             referencedRelation: "tradesmen"
