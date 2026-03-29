@@ -49,7 +49,7 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
                 <h3 className="truncate font-display text-xl font-semibold text-foreground group-hover:text-primary">
                   {tradesman.full_name}
                 </h3>
-                <p className="text-sm font-medium text-secondary">
+                <p className="text-base font-medium text-secondary">
                   {t(`categories.${tradesman.trade_category}`)}
                   {tradesman.additional_categories?.length > 0 && (
                     <span className="text-muted-foreground font-normal">
