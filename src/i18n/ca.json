@@ -25,6 +25,8 @@
     "mason": "Paleta",
     "roofer": "Teulader",
     "hvac": "Climatització",
+    "sport_trainer": "Entrenador / Esport",
+    "catering": "Càtering",
     "other": "Altre"
   },
   "card": {

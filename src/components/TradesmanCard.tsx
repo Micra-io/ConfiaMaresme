@@ -38,7 +38,7 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
         <CardContent className="flex flex-col gap-4 p-5">
           <Link to={`/tradesman/${tradesman.id}`}>
             <div className="flex items-start gap-4">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted">
                 {tradesman.profile_image_url ? (
                   <img src={tradesman.profile_image_url} alt={tradesman.full_name} className="h-full w-full object-cover" />
                 ) : (
@@ -46,10 +46,10 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <h3 className="truncate font-display text-lg font-semibold text-foreground group-hover:text-primary">
+                <h3 className="truncate font-display text-xl font-semibold text-foreground group-hover:text-primary">
                   {tradesman.full_name}
                 </h3>
-                <p className="text-sm font-medium text-secondary">
+                <p className="text-base font-medium text-secondary">
                   {t(`categories.${tradesman.trade_category}`)}
                   {tradesman.additional_categories?.length > 0 && (
                     <span className="text-muted-foreground font-normal">
@@ -62,14 +62,14 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
             </div>
 
             {tradesman.location && (
-              <div className="mt-3 flex items-center gap-1.5 text-sm text-muted-foreground">
-                <MapPin className="h-3.5 w-3.5" />
+              <div className="mt-3 flex items-center gap-1.5 text-base text-muted-foreground">
+                <MapPin className="h-4 w-4" />
                 {tradesman.location}
               </div>
             )}
 
             {tradesman.bio && (
-              <p className="line-clamp-2 text-sm text-muted-foreground">{tradesman.bio}</p>
+              <p className="line-clamp-2 text-base text-muted-foreground">{tradesman.bio}</p>
             )}
 
             <div className="flex flex-wrap gap-2">

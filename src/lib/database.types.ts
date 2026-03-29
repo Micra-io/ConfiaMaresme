@@ -80,6 +80,8 @@ export type Database = {
         | "mason"
         | "roofer"
         | "hvac"
+        | "sport_trainer"
+        | "catering"
         | "other"
     }
     CompositeTypes: {

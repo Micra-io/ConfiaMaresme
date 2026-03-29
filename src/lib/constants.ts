@@ -10,6 +10,8 @@ export const TRADE_CATEGORIES = [
   { value: 'mason', label: 'Albañil', icon: 'BrickWall' },
   { value: 'roofer', label: 'Tejador', icon: 'Home' },
   { value: 'hvac', label: 'Climatización', icon: 'Wind' },
+  { value: 'sport_trainer', label: 'Entrenador', icon: 'Dumbbell' },
+  { value: 'catering', label: 'Catering', icon: 'UtensilsCrossed' },
   { value: 'other', label: 'Otro', icon: 'MoreHorizontal' },
 ] as const;
 

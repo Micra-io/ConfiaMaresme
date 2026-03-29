@@ -25,6 +25,8 @@
     "mason": "Mason",
     "roofer": "Roofer",
     "hvac": "HVAC",
+    "sport_trainer": "Sport / Trainer",
+    "catering": "Catering",
     "other": "Other"
   },
   "card": {
