@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDemoMode } from '@/hooks/useDemoMode';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Globe, Menu, X, ShieldCheck, Eye } from 'lucide-react';
+import { Menu, X, ShieldCheck, Eye } from 'lucide-react';
 import { useState } from 'react';
 import {
   DropdownMenu,
@@ -15,22 +15,33 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 
-const CatalanFlag = () => (
-  <svg width="1.2em" height="0.85em" viewBox="0 0 20 14" className="inline-block rounded-[2px] align-middle">
-    <rect width="20" height="14" fill="#FCDD09" />
-    <rect y="1.56" width="20" height="1.56" fill="#DA121A" />
-    <rect y="4.67" width="20" height="1.56" fill="#DA121A" />
-    <rect y="7.78" width="20" height="1.56" fill="#DA121A" />
-    <rect y="10.89" width="20" height="1.56" fill="#DA121A" />
-  </svg>
-);
-
-const UI_LANGUAGES: { code: string; label: string; flag: string | null }[] = [
-  { code: 'es', label: 'Español', flag: '🇪🇸' },
-  { code: 'ca', label: 'Català', flag: null },
-  { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+const UI_LANGUAGES: { code: string; label: string }[] = [
+  { code: 'es', label: 'ES' },
+  { code: 'ca', label: 'CA' },
+  { code: 'en', label: 'EN' },
+  { code: 'ru', label: 'RU' },
 ];
+
+const LanguagePills = () => {
+  const { i18n } = useTranslation();
+  return (
+    <div className="flex items-center gap-1 rounded-full border bg-muted/50 p-0.5">
+      {UI_LANGUAGES.map((lang) => (
+        <button
+          key={lang.code}
+          onClick={() => i18n.changeLanguage(lang.code)}
+          className={`rounded-full px-2.5 py-1 text-sm font-medium transition-colors ${
+            i18n.language === lang.code
+              ? 'bg-primary text-primary-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          {lang.label}
+        </button>
+      ))}
+    </div>
+  );
+};
 
 const Navbar = () => {
   const { user, signOut } = useAuth();
@@ -39,7 +50,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const currentLang = UI_LANGUAGES.find((l) => l.code === i18n.language) || UI_LANGUAGES[0];
+  
   const initials = user?.email?.substring(0, 2).toUpperCase() || '?';
 
   const handleSignOut = async () => {
@@ -86,26 +97,7 @@ const Navbar = () => {
             </Link>
           )}
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="default" className="gap-1.5 text-base">
-                <Globe className="h-4 w-4" />
-                {currentLang.code === 'ca' ? <CatalanFlag /> : <span className="text-base">{currentLang.flag}</span>}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="text-base">
-              {UI_LANGUAGES.map((lang) => (
-                <DropdownMenuItem
-                  key={lang.code}
-                  onClick={() => i18n.changeLanguage(lang.code)}
-                  className={`text-base ${i18n.language === lang.code ? 'bg-accent' : ''}`}
-                >
-                  <span className="mr-2 text-base">{lang.code === 'ca' ? <CatalanFlag /> : lang.flag}</span>
-                  {lang.label}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <LanguagePills />
 
           {user ? (
             <DropdownMenu>
@@ -147,26 +139,7 @@ const Navbar = () => {
 
         {/* Mobile toggle */}
         <div className="flex items-center gap-2 md:hidden">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="default" className="gap-1.5 text-base">
-                <Globe className="h-5 w-5" />
-                {currentLang.code === 'ca' ? <CatalanFlag /> : <span className="text-base">{currentLang.flag}</span>}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="text-base">
-              {UI_LANGUAGES.map((lang) => (
-                <DropdownMenuItem
-                  key={lang.code}
-                  onClick={() => i18n.changeLanguage(lang.code)}
-                  className={`text-base ${i18n.language === lang.code ? 'bg-accent' : ''}`}
-                >
-                  <span className="mr-2 text-base">{lang.code === 'ca' ? <CatalanFlag /> : lang.flag}</span>
-                  {lang.label}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <LanguagePills />
           <button onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
