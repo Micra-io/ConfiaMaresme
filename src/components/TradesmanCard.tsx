@@ -46,7 +46,7 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <h3 className="truncate font-display text-lg font-semibold text-foreground group-hover:text-primary">
+                <h3 className="truncate font-display text-xl font-semibold text-foreground group-hover:text-primary">
                   {tradesman.full_name}
                 </h3>
                 <p className="text-sm font-medium text-secondary">
