@@ -16,30 +16,39 @@ import {
 import { Badge } from '@/components/ui/badge';
 
 const UI_LANGUAGES: { code: string; label: string }[] = [
-  { code: 'es', label: 'ES' },
-  { code: 'ca', label: 'CA' },
-  { code: 'en', label: 'EN' },
-  { code: 'ru', label: 'RU' },
+  { code: 'es', label: 'Español' },
+  { code: 'ca', label: 'Català' },
+  { code: 'en', label: 'English' },
+  { code: 'ru', label: 'Русский' },
 ];
 
-const LanguagePills = () => {
+const LanguageDropdown = () => {
   const { i18n } = useTranslation();
+  const current = UI_LANGUAGES.find((l) => l.code === i18n.language) || UI_LANGUAGES[0];
+
   return (
-    <div className="flex items-center gap-1 rounded-full border bg-muted/50 p-0.5">
-      {UI_LANGUAGES.map((lang) => (
-        <button
-          key={lang.code}
-          onClick={() => i18n.changeLanguage(lang.code)}
-          className={`rounded-full px-2.5 py-1 text-sm font-medium transition-colors ${
-            i18n.language === lang.code
-              ? 'bg-primary text-primary-foreground shadow-sm'
-              : 'text-muted-foreground hover:text-foreground'
-          }`}
-        >
-          {lang.label}
-        </button>
-      ))}
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="default" className="gap-2 text-base font-medium">
+          <Globe className="h-4 w-4" />
+          {current.code.toUpperCase()}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-[140px] p-1">
+        {UI_LANGUAGES.map((lang) => (
+          <DropdownMenuItem
+            key={lang.code}
+            onClick={() => i18n.changeLanguage(lang.code)}
+            className={`text-base rounded-md px-3 py-2 ${
+              i18n.language === lang.code ? 'bg-primary text-primary-foreground' : ''
+            }`}
+          >
+            <span className="mr-2 font-semibold">{lang.code.toUpperCase()}</span>
+            {lang.label}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
