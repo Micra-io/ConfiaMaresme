@@ -25,12 +25,33 @@ const CatalanFlag = () => (
   </svg>
 );
 
-const UI_LANGUAGES: { code: string; label: string; flag: string | null }[] = [
-  { code: 'es', label: 'Español', flag: '🇪🇸' },
-  { code: 'ca', label: 'Català', flag: null },
-  { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+const UI_LANGUAGES: { code: string; label: string }[] = [
+  { code: 'es', label: 'ES' },
+  { code: 'ca', label: 'CA' },
+  { code: 'en', label: 'EN' },
+  { code: 'ru', label: 'RU' },
 ];
+
+const LanguagePills = () => {
+  const { i18n } = useTranslation();
+  return (
+    <div className="flex items-center gap-1 rounded-full border bg-muted/50 p-0.5">
+      {UI_LANGUAGES.map((lang) => (
+        <button
+          key={lang.code}
+          onClick={() => i18n.changeLanguage(lang.code)}
+          className={`rounded-full px-2.5 py-1 text-sm font-medium transition-colors ${
+            i18n.language === lang.code
+              ? 'bg-primary text-primary-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          {lang.label}
+        </button>
+      ))}
+    </div>
+  );
+};
 
 const Navbar = () => {
   const { user, signOut } = useAuth();
