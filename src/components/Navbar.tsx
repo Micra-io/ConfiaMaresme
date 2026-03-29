@@ -178,7 +178,7 @@ const Navbar = () => {
         <div className="border-t bg-card px-4 py-4 md:hidden">
           <div className="flex flex-col gap-3">
             {(!isDemoActive || activeDemoView === 'resident') && (
-              <Link to="/" onClick={() => setMobileOpen(false)} className="text-sm font-medium">{t('nav.directory')}</Link>
+              <Link to="/" onClick={() => setMobileOpen(false)} className="text-base font-medium">{t('nav.directory')}</Link>
             )}
             {showDashboard && (
               <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="text-sm font-medium">{dashboardLabel}</Link>
