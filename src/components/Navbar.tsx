@@ -69,7 +69,7 @@ const Navbar = () => {
         {/* Desktop */}
         <div className="hidden items-center gap-3 md:flex">
           {(!isDemoActive || activeDemoView === 'resident') && (
-            <Link to="/" className="whitespace-nowrap text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+            <Link to="/" className="whitespace-nowrap text-base font-medium text-muted-foreground transition-colors hover:text-foreground">
               {t('nav.directory')}
             </Link>
           )}
