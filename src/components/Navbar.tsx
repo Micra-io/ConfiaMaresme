@@ -93,14 +93,14 @@ const Navbar = () => {
                 {currentLang.code === 'ca' ? <CatalanFlag /> : <span className="text-base">{currentLang.flag}</span>}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="text-base">
               {UI_LANGUAGES.map((lang) => (
                 <DropdownMenuItem
                   key={lang.code}
                   onClick={() => i18n.changeLanguage(lang.code)}
-                  className={i18n.language === lang.code ? 'bg-accent' : ''}
+                  className={`text-base ${i18n.language === lang.code ? 'bg-accent' : ''}`}
                 >
-                  <span className="mr-2">{lang.code === 'ca' ? <CatalanFlag /> : lang.flag}</span>
+                  <span className="mr-2 text-base">{lang.code === 'ca' ? <CatalanFlag /> : lang.flag}</span>
                   {lang.label}
                 </DropdownMenuItem>
               ))}
