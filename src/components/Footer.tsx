@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-between sm:text-left">
           <div>
-            <p className="font-display text-lg font-semibold text-foreground">
+            <p className="font-display text-xl font-semibold text-foreground">
               Confia<span className="text-secondary">Maresme</span>
             </p>
             <p className="mt-1 text-sm text-muted-foreground">{t('footer.tagline')}</p>
