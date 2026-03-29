@@ -51,6 +51,10 @@ export type Database = {
           is_admin: boolean
           is_blocked: boolean
           user_role: Database["public"]["Enums"]["user_role"]
+          whatsapp_code_expires_at: string | null
+          whatsapp_number: string | null
+          whatsapp_verification_code: string | null
+          whatsapp_verified: boolean
         }
         Insert: {
           created_at?: string
@@ -59,6 +63,10 @@ export type Database = {
           is_admin?: boolean
           is_blocked?: boolean
           user_role?: Database["public"]["Enums"]["user_role"]
+          whatsapp_code_expires_at?: string | null
+          whatsapp_number?: string | null
+          whatsapp_verification_code?: string | null
+          whatsapp_verified?: boolean
         }
         Update: {
           created_at?: string
@@ -67,6 +75,10 @@ export type Database = {
           is_admin?: boolean
           is_blocked?: boolean
           user_role?: Database["public"]["Enums"]["user_role"]
+          whatsapp_code_expires_at?: string | null
+          whatsapp_number?: string | null
+          whatsapp_verification_code?: string | null
+          whatsapp_verified?: boolean
         }
         Relationships: []
       }
@@ -274,6 +286,24 @@ export type Database = {
         }
         Relationships: []
       }
+      verification_attempts: {
+        Row: {
+          created_at: string
+          id: string
+          phone: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          phone: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          phone?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -282,6 +312,7 @@ export type Database = {
       claim_tradesman_profile:
         | { Args: { _phone: string }; Returns: string }
         | { Args: { _phone: string; _user_id: string }; Returns: string }
+      get_my_whatsapp_status: { Args: never; Returns: Json }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
       is_blocked: { Args: { _user_id: string }; Returns: boolean }
       is_tradesman_owner: { Args: { _tradesman_id: string }; Returns: boolean }

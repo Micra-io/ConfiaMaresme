@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Crown, Sparkles } from 'lucide-react';
+import WhatsAppSettingsSection from '@/components/WhatsAppSettingsSection';
 
 const DashboardSettings = () => {
   const { user, signOut } = useAuth();
@@ -37,6 +38,8 @@ const DashboardSettings = () => {
           </Button>
         </CardContent>
       </Card>
+
+      <WhatsAppSettingsSection />
 
       <Card>
         <CardContent className="pt-6 space-y-4">

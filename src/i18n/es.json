@@ -209,5 +209,31 @@
   "index": {
     "noResults": "No se encontraron profesionales.",
     "tryChangingFilters": "Intenta cambiar los filtros o la búsqueda."
+  },
+  "whatsapp": {
+    "bannerTitle": "Verifica tu WhatsApp",
+    "bannerDesc": "Recibe notificaciones sobre nuevos profesionales en tu zona",
+    "addWhatsApp": "Añadir WhatsApp",
+    "modalTitle": "Verificación de WhatsApp",
+    "phoneDesc": "Introduce tu número de WhatsApp para recibir notificaciones y presupuestos de profesionales.",
+    "phoneLabel": "Número de WhatsApp",
+    "sendCode": "Enviar código",
+    "codeSent": "¡Código de verificación enviado!",
+    "codeDesc": "Introduce el código de 6 dígitos enviado a {{phone}}",
+    "verify": "Verificar",
+    "resendIn": "Reenviar en {{seconds}}s",
+    "resend": "Reenviar código",
+    "verified": "¡WhatsApp verificado!",
+    "successTitle": "WhatsApp Verificado ✓",
+    "successDesc": "Recibirás notificaciones directamente en WhatsApp.",
+    "continue": "Continuar",
+    "invalidPhone": "Introduce un número válido (ej. +34612345678)",
+    "sendError": "Error al enviar el código. Inténtalo de nuevo.",
+    "verifyError": "Error de verificación. Inténtalo de nuevo.",
+    "settingsTitle": "WhatsApp",
+    "verifiedBadge": "Verificado",
+    "notAdded": "No se ha añadido número de WhatsApp",
+    "change": "Cambiar",
+    "removed": "Número de WhatsApp eliminado"
   }
 }

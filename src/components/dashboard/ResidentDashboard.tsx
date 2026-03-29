@@ -10,6 +10,8 @@ import {
   Unlock, Star, Heart, Settings, MessageCircle,
   MapPin, User, Clock, Trash2,
 } from 'lucide-react';
+import WhatsAppVerificationBanner from '@/components/WhatsAppVerificationBanner';
+import WhatsAppSettingsSection from '@/components/WhatsAppSettingsSection';
 import { formatDistanceToNow } from 'date-fns';
 import { es, ca, enUS, ru } from 'date-fns/locale';
 import { toast } from 'sonner';
@@ -122,6 +124,8 @@ const ResidentDashboard = () => {
         <h1 className="font-display text-3xl font-bold">{t('dashboard.welcomeBack')}</h1>
         <p className="text-base text-muted-foreground">{user?.email}</p>
       </div>
+
+      <WhatsAppVerificationBanner />
 
       {/* Unlocked Contacts */}
       <section>
@@ -293,6 +297,7 @@ const ResidentDashboard = () => {
               <p className="text-sm font-medium text-muted-foreground">{t('auth.email')}</p>
               <p className="text-base font-medium">{user?.email}</p>
             </div>
+            <WhatsAppSettingsSection />
             <div className="flex gap-3">
               <Link to="/claim">
                 <Button variant="outline">{t('dashboard.claimProfile')}</Button>

@@ -209,5 +209,31 @@
   "index": {
     "noResults": "No professionals found.",
     "tryChangingFilters": "Try changing the filters or search."
+  },
+  "whatsapp": {
+    "bannerTitle": "Verify your WhatsApp",
+    "bannerDesc": "Get notified about new tradesmen in your area",
+    "addWhatsApp": "Add WhatsApp",
+    "modalTitle": "WhatsApp Verification",
+    "phoneDesc": "Enter your WhatsApp number to receive notifications and quotes from tradesmen.",
+    "phoneLabel": "WhatsApp number",
+    "sendCode": "Send Code",
+    "codeSent": "Verification code sent!",
+    "codeDesc": "Enter the 6-digit code sent to {{phone}}",
+    "verify": "Verify",
+    "resendIn": "Resend in {{seconds}}s",
+    "resend": "Resend Code",
+    "verified": "WhatsApp verified!",
+    "successTitle": "WhatsApp Verified ✓",
+    "successDesc": "You'll receive notifications directly on WhatsApp.",
+    "continue": "Continue",
+    "invalidPhone": "Enter a valid phone number (e.g. +34612345678)",
+    "sendError": "Failed to send code. Try again.",
+    "verifyError": "Verification failed. Try again.",
+    "settingsTitle": "WhatsApp",
+    "verifiedBadge": "Verified",
+    "notAdded": "No WhatsApp number added",
+    "change": "Change",
+    "removed": "WhatsApp number removed"
   }
 }
