@@ -31,7 +31,7 @@ const HeroSection = ({ searchQuery, onSearchChange }: HeroSectionProps) => {
               placeholder={t('hero.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="h-12 rounded-full border-0 bg-card pl-12 text-base shadow-lg"
+              className="h-14 rounded-full border-0 bg-card pl-12 text-lg shadow-lg"
             />
           </div>
         </div>
