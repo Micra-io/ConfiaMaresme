@@ -38,7 +38,7 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
         <CardContent className="flex flex-col gap-4 p-5">
           <Link to={`/tradesman/${tradesman.id}`}>
             <div className="flex items-start gap-4">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted">
                 {tradesman.profile_image_url ? (
                   <img src={tradesman.profile_image_url} alt={tradesman.full_name} className="h-full w-full object-cover" />
                 ) : (
