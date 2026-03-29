@@ -56,7 +56,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between gap-2 px-4 py-3">
         <div className="flex items-center gap-2">
           <Link to="/" className="flex shrink-0 items-center gap-2">
-            <span className="font-display text-xl font-bold"><span className="text-primary">Confia</span><span className="text-secondary">Maresme</span></span>
+            <span className="font-display text-2xl font-bold"><span className="text-primary">Confia</span><span className="text-secondary">Maresme</span></span>
           </Link>
           {isDemoActive && (
             <Badge variant="outline" className="gap-1 border-primary/30 text-primary text-[10px]">
@@ -118,10 +118,10 @@ const Navbar = () => {
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-52">
                 <div className="px-2 py-1.5">
-                  <p className="truncate text-sm font-medium">{user.email}</p>
-                  <p className="text-xs text-muted-foreground capitalize">{effectiveRole || 'user'}</p>
+                  <p className="truncate text-base font-medium">{user.email}</p>
+                  <p className="text-sm text-muted-foreground capitalize">{effectiveRole || 'user'}</p>
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => navigate('/dashboard')}>
@@ -178,14 +178,14 @@ const Navbar = () => {
         <div className="border-t bg-card px-4 py-4 md:hidden">
           <div className="flex flex-col gap-3">
             {(!isDemoActive || activeDemoView === 'resident') && (
-              <Link to="/" onClick={() => setMobileOpen(false)} className="text-sm font-medium">{t('nav.directory')}</Link>
+              <Link to="/" onClick={() => setMobileOpen(false)} className="text-base font-medium">{t('nav.directory')}</Link>
             )}
             {showDashboard && (
-              <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="text-sm font-medium">{dashboardLabel}</Link>
+              <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="text-base font-medium">{dashboardLabel}</Link>
             )}
             {showAdmin && (
-              <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-1.5 text-sm font-medium">
-                <ShieldCheck className="h-3.5 w-3.5" /> Admin Dashboard
+              <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-1.5 text-base font-medium">
+                <ShieldCheck className="h-4 w-4" /> Admin Dashboard
               </Link>
             )}
             {user ? (
@@ -194,12 +194,12 @@ const Navbar = () => {
                   <Avatar className="h-6 w-6">
                     <AvatarFallback className="bg-primary text-xs text-primary-foreground">{initials}</AvatarFallback>
                   </Avatar>
-                  <span className="truncate text-sm text-muted-foreground">{user.email}</span>
+                  <span className="truncate text-base text-muted-foreground">{user.email}</span>
                 </div>
-                <button onClick={() => { handleSignOut(); setMobileOpen(false); }} className="text-left text-sm font-medium text-destructive">{t('nav.signOut')}</button>
+                <button onClick={() => { handleSignOut(); setMobileOpen(false); }} className="text-left text-base font-medium text-destructive">{t('nav.signOut')}</button>
               </>
             ) : (
-              <Link to="/auth" onClick={() => setMobileOpen(false)} className="text-sm font-medium text-primary">{t('nav.signIn')}</Link>
+              <Link to="/auth" onClick={() => setMobileOpen(false)} className="text-base font-medium text-primary">{t('nav.signIn')}</Link>
             )}
           </div>
         </div>

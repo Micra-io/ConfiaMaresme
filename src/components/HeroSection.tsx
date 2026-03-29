@@ -26,12 +26,12 @@ const HeroSection = ({ searchQuery, onSearchChange }: HeroSectionProps) => {
         </p>
         <div className="mx-auto mt-8 max-w-xl" style={{ animationDelay: '0.2s' }}>
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute left-4 top-1/2 h-6 w-6 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder={t('hero.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="h-12 rounded-full border-0 bg-card pl-12 text-base shadow-lg"
+              className="h-14 rounded-full border-0 bg-card pl-12 text-lg shadow-lg"
             />
           </div>
         </div>
