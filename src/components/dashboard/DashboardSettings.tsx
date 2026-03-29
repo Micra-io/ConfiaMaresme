@@ -39,6 +39,8 @@ const DashboardSettings = () => {
         </CardContent>
       </Card>
 
+      <WhatsAppSettingsSection />
+
       <Card>
         <CardContent className="pt-6 space-y-4">
           <div>
