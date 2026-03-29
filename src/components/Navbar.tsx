@@ -75,7 +75,7 @@ const Navbar = () => {
           )}
 
           {showDashboard && (
-            <Link to="/dashboard" className="whitespace-nowrap text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+            <Link to="/dashboard" className="whitespace-nowrap text-base font-medium text-muted-foreground transition-colors hover:text-foreground">
               {dashboardLabel}
             </Link>
           )}
