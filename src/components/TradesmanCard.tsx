@@ -69,7 +69,7 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
             )}
 
             {tradesman.bio && (
-              <p className="line-clamp-2 text-sm text-muted-foreground">{tradesman.bio}</p>
+              <p className="line-clamp-2 text-base text-muted-foreground">{tradesman.bio}</p>
             )}
 
             <div className="flex flex-wrap gap-2">

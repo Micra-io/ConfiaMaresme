@@ -81,7 +81,7 @@ const Navbar = () => {
           )}
 
           {showAdmin && (
-            <Link to="/admin" className="flex items-center gap-1 whitespace-nowrap text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+            <Link to="/admin" className="flex items-center gap-1 whitespace-nowrap text-base font-medium text-muted-foreground transition-colors hover:text-foreground">
               <ShieldCheck className="h-3.5 w-3.5" /> Admin
             </Link>
           )}

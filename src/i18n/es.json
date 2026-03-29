@@ -25,6 +25,8 @@
     "mason": "Albañil",
     "roofer": "Tejador",
     "hvac": "Climatización",
+    "sport_trainer": "Entrenador / Deporte",
+    "catering": "Catering",
     "other": "Otro"
   },
   "card": {
