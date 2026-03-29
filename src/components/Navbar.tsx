@@ -56,7 +56,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between gap-2 px-4 py-3">
         <div className="flex items-center gap-2">
           <Link to="/" className="flex shrink-0 items-center gap-2">
-            <span className="font-display text-xl font-bold"><span className="text-primary">Confia</span><span className="text-secondary">Maresme</span></span>
+            <span className="font-display text-2xl font-bold"><span className="text-primary">Confia</span><span className="text-secondary">Maresme</span></span>
           </Link>
           {isDemoActive && (
             <Badge variant="outline" className="gap-1 border-primary/30 text-primary text-[10px]">
