@@ -15,16 +15,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 
-const CatalanFlag = () => (
-  <svg width="1.2em" height="0.85em" viewBox="0 0 20 14" className="inline-block rounded-[2px] align-middle">
-    <rect width="20" height="14" fill="#FCDD09" />
-    <rect y="1.56" width="20" height="1.56" fill="#DA121A" />
-    <rect y="4.67" width="20" height="1.56" fill="#DA121A" />
-    <rect y="7.78" width="20" height="1.56" fill="#DA121A" />
-    <rect y="10.89" width="20" height="1.56" fill="#DA121A" />
-  </svg>
-);
-
 const UI_LANGUAGES: { code: string; label: string }[] = [
   { code: 'es', label: 'ES' },
   { code: 'ca', label: 'CA' },
