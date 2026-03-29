@@ -62,8 +62,8 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
             </div>
 
             {tradesman.location && (
-              <div className="mt-3 flex items-center gap-1.5 text-sm text-muted-foreground">
-                <MapPin className="h-3.5 w-3.5" />
+              <div className="mt-3 flex items-center gap-1.5 text-base text-muted-foreground">
+                <MapPin className="h-4 w-4" />
                 {tradesman.location}
               </div>
             )}
