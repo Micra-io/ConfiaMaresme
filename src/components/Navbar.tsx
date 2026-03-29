@@ -107,26 +107,7 @@ const Navbar = () => {
             </Link>
           )}
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="default" className="gap-1.5 text-base">
-                <Globe className="h-4 w-4" />
-                {currentLang.code === 'ca' ? <CatalanFlag /> : <span className="text-base">{currentLang.flag}</span>}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="text-base">
-              {UI_LANGUAGES.map((lang) => (
-                <DropdownMenuItem
-                  key={lang.code}
-                  onClick={() => i18n.changeLanguage(lang.code)}
-                  className={`text-base ${i18n.language === lang.code ? 'bg-accent' : ''}`}
-                >
-                  <span className="mr-2 text-base">{lang.code === 'ca' ? <CatalanFlag /> : lang.flag}</span>
-                  {lang.label}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <LanguagePills />
 
           {user ? (
             <DropdownMenu>
