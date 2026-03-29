@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDemoMode } from '@/hooks/useDemoMode';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Globe, Menu, X, ShieldCheck, Eye } from 'lucide-react';
+import { Menu, X, ShieldCheck, Eye } from 'lucide-react';
 import { useState } from 'react';
 import {
   DropdownMenu,
