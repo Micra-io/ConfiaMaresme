@@ -68,7 +68,7 @@ const Navbar = () => {
   };
 
   const dashboardLabel = effectiveRole === 'tradesman' ? t('nav.myDashboard') : t('nav.myProfile');
-  const showDashboard = effectiveRole === 'tradesman';
+  const showDashboard = !!user;
   const showAdmin = effectiveIsAdmin;
 
   return (
