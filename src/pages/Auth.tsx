@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -9,36 +9,22 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
-import { ShieldCheck, Users } from 'lucide-react';
-import RoleSelection from '@/components/RoleSelection';
 
 const Auth = () => {
-  const { user, userRole, profileLoading } = useAuth();
+  const { user, profileLoading } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [searchParams] = useSearchParams();
-  const isResidentFlow = searchParams.get('role') === 'resident';
 
-  const [isLogin, setIsLogin] = useState(!isResidentFlow);
+  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showRoleSelection, setShowRoleSelection] = useState(false);
 
   useEffect(() => {
     if (!user || profileLoading) return;
-    // If user has no role yet (just signed up via Google), show role selection
-    if (userRole === null) {
-      setShowRoleSelection(true);
-      return;
-    }
-    // Role-based redirect
-    if (userRole === 'tradesman') {
-      navigate('/dashboard');
-    } else {
-      navigate('/');
-    }
-  }, [user, userRole, profileLoading, navigate]);
+    // Everyone goes home — tradesmen can navigate to /dashboard from there
+    navigate('/');
+  }, [user, profileLoading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,51 +59,26 @@ const Auth = () => {
     if (error) toast.error(error.message);
   };
 
-  if (showRoleSelection && user) {
-    return <RoleSelection />;
-  }
-
   return (
     <div className="flex min-h-[80vh] items-center justify-center px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="font-display text-2xl">
-            {isResidentFlow && !isLogin
-              ? t('auth.residentSignup')
-              : isLogin
-                ? t('auth.signIn')
-                : t('auth.createAccount')}
+            {isLogin ? t('auth.signIn') : t('auth.createAccount')}
           </CardTitle>
           <CardDescription>
-            {isResidentFlow && !isLogin
-              ? t('auth.residentDesc')
-              : isLogin
-                ? t('auth.signInDesc')
-                : t('auth.createAccountDesc')}
+            {isLogin ? t('auth.signInDesc') : t('auth.createAccountDesc')}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {isResidentFlow && !isLogin && (
-            <div className="mb-6 space-y-2">
-              <div className="flex items-start gap-3 rounded-lg border bg-muted/50 p-3">
-                <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />
-                <p className="text-sm text-muted-foreground">{t('auth.protectPros')}</p>
-              </div>
-              <div className="flex items-start gap-3 rounded-lg border bg-muted/50 p-3">
-                <Users className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />
-                <p className="text-sm text-muted-foreground">{t('auth.directAccess')}</p>
-              </div>
-            </div>
-          )}
-
           {/* Google OAuth */}
           <Button
             variant="outline"
-            className="w-full gap-2"
+            className="w-full gap-2 text-base"
             onClick={handleGoogleSignIn}
             type="button"
           >
-            <svg className="h-4 w-4" viewBox="0 0 24 24">
+            <svg className="h-5 w-5" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
               <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
               <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
@@ -128,7 +89,7 @@ const Auth = () => {
 
           <div className="my-4 flex items-center gap-3">
             <Separator className="flex-1" />
-            <span className="text-xs text-muted-foreground">{t('auth.orWithEmail')}</span>
+            <span className="text-sm text-muted-foreground">{t('auth.orWithEmail')}</span>
             <Separator className="flex-1" />
           </div>
 
@@ -142,6 +103,7 @@ const Auth = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tu@email.com"
                 required
+                className="text-base"
               />
             </div>
             <div className="space-y-2">
@@ -154,14 +116,15 @@ const Auth = () => {
                 placeholder="••••••••"
                 required
                 minLength={6}
+                className="text-base"
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full text-base" disabled={loading}>
               {loading ? t('auth.loading') : isLogin ? t('auth.enter') : t('auth.register')}
             </Button>
           </form>
 
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-4 text-center text-base">
             <button
               type="button"
               onClick={() => setIsLogin(!isLogin)}
