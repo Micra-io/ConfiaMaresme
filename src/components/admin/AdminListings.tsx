@@ -1,15 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, Fragment } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   Search, EyeOff, Trash2, ArrowDownToLine, Loader2,
   CheckCircle2, HelpCircle, XCircle, Phone, MessageSquare,
-  ChevronDown, ChevronUp,
+  ChevronDown, ChevronUp, ArrowUpDown, ArrowUp, ArrowDown, X,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
@@ -18,6 +20,7 @@ import {
   AlertDialogTitle, AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { TRADE_CATEGORIES, LANGUAGES } from '@/lib/constants';
+import { MUNICIPALITY_OPTIONS } from '@/lib/maresme';
 import InlineEditCell from './InlineEditCell';
 import { cn } from '@/lib/utils';
 
@@ -54,6 +57,13 @@ const CONTACT_METHODS = [
   { value: 'none', label: 'None' },
 ];
 
+const REACHABILITY_OPTIONS = [
+  { value: 'unknown', label: 'Unknown' },
+  { value: 'verified', label: 'Verified' },
+  { value: 'unreachable', label: 'Unreachable' },
+  { value: 'phone_only', label: 'Phone Only' },
+];
+
 const SOURCE_STYLES: Record<string, string> = {
   manual: 'bg-muted text-muted-foreground border-border',
   scraped: 'bg-violet-500/10 text-violet-700 border-violet-200',
@@ -83,7 +93,7 @@ const WhatsAppIcon = ({ status, checkedAt }: { status: string; checkedAt: string
   const icons: Record<string, { icon: typeof CheckCircle2; className: string; label: string }> = {
     verified: { icon: CheckCircle2, className: 'text-emerald-600', label: 'Verified' },
     unknown: { icon: HelpCircle, className: 'text-muted-foreground', label: 'Unknown' },
-    unreachable: { icon: XCircle, className: 'text-red-500', label: 'Unreachable' },
+    unreachable: { icon: XCircle, className: 'text-destructive', label: 'Unreachable' },
     phone_only: { icon: Phone, className: 'text-amber-600', label: 'Phone only' },
   };
   const config = icons[status] || icons.unknown;
@@ -95,9 +105,7 @@ const WhatsAppIcon = ({ status, checkedAt }: { status: string; checkedAt: string
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <span className="inline-flex">
-          <Icon className={cn('h-4 w-4', config.className)} />
-        </span>
+        <span className="inline-flex"><Icon className={cn('h-4 w-4', config.className)} /></span>
       </TooltipTrigger>
       <TooltipContent side="top" className="text-xs">
         <p className="font-medium">{config.label}</p>
@@ -107,12 +115,111 @@ const WhatsAppIcon = ({ status, checkedAt }: { status: string; checkedAt: string
   );
 };
 
+// ─── Filter chip component ──────────────────────────────────────────
+const FilterSelect = ({ label, value, onChange, options }: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: { value: string; label: string }[];
+}) => (
+  <Select value={value} onValueChange={onChange}>
+    <SelectTrigger className="h-8 text-xs w-auto min-w-[120px] gap-1">
+      <span className="text-muted-foreground mr-0.5">{label}:</span>
+      <SelectValue />
+    </SelectTrigger>
+    <SelectContent>
+      {options.map(o => (
+        <SelectItem key={o.value} value={o.value} className="text-xs">{o.label}</SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+);
+
+// ─── Bulk action bar ────────────────────────────────────────────────
+const BulkActionBar = ({ count, onAction, loading }: {
+  count: number;
+  onAction: (action: string, value?: string) => void;
+  loading: boolean;
+}) => {
+  const [bulkMunicipality, setBulkMunicipality] = useState('');
+  const [bulkTrade, setBulkTrade] = useState('');
+  const [bulkReachability, setBulkReachability] = useState('');
+
+  return (
+    <div className="flex items-center gap-2 flex-wrap rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 mb-3">
+      <span className="text-sm font-medium text-primary shrink-0">
+        {count} selected
+      </span>
+      <div className="h-4 w-px bg-border" />
+
+      <Button size="sm" variant="outline" className="h-7 text-xs" disabled={loading} onClick={() => onAction('mark_reviewed')}>
+        Mark Reviewed
+      </Button>
+
+      <div className="flex items-center gap-1">
+        <Select value={bulkMunicipality} onValueChange={setBulkMunicipality}>
+          <SelectTrigger className="h-7 text-xs w-[140px]"><SelectValue placeholder="Municipality…" /></SelectTrigger>
+          <SelectContent>{MUNICIPALITY_OPTIONS.map(o => <SelectItem key={o.value} value={o.value} className="text-xs">{o.label}</SelectItem>)}</SelectContent>
+        </Select>
+        {bulkMunicipality && (
+          <Button size="sm" variant="outline" className="h-7 text-xs px-2" disabled={loading} onClick={() => { onAction('set_municipality', bulkMunicipality); setBulkMunicipality(''); }}>
+            Apply
+          </Button>
+        )}
+      </div>
+
+      <div className="flex items-center gap-1">
+        <Select value={bulkTrade} onValueChange={setBulkTrade}>
+          <SelectTrigger className="h-7 text-xs w-[130px]"><SelectValue placeholder="Trade…" /></SelectTrigger>
+          <SelectContent>{TRADE_CATEGORIES.map(o => <SelectItem key={o.value} value={o.value} className="text-xs">{o.label}</SelectItem>)}</SelectContent>
+        </Select>
+        {bulkTrade && (
+          <Button size="sm" variant="outline" className="h-7 text-xs px-2" disabled={loading} onClick={() => { onAction('set_trade', bulkTrade); setBulkTrade(''); }}>
+            Apply
+          </Button>
+        )}
+      </div>
+
+      <div className="flex items-center gap-1">
+        <Select value={bulkReachability} onValueChange={setBulkReachability}>
+          <SelectTrigger className="h-7 text-xs w-[120px]"><SelectValue placeholder="Reachability…" /></SelectTrigger>
+          <SelectContent>{REACHABILITY_OPTIONS.map(o => <SelectItem key={o.value} value={o.value} className="text-xs">{o.label}</SelectItem>)}</SelectContent>
+        </Select>
+        {bulkReachability && (
+          <Button size="sm" variant="outline" className="h-7 text-xs px-2" disabled={loading} onClick={() => { onAction('set_reachability', bulkReachability); setBulkReachability(''); }}>
+            Apply
+          </Button>
+        )}
+      </div>
+
+      <Button size="sm" variant="ghost" className="h-7 text-xs ml-auto" onClick={() => onAction('clear_selection')}>
+        <X className="h-3 w-3 mr-1" /> Clear
+      </Button>
+    </div>
+  );
+};
+
+// ─── Main component ─────────────────────────────────────────────────
+type SortDir = 'asc' | 'desc' | null;
+
 const AdminListings = ({ onDemoted }: { onDemoted?: () => void }) => {
   const [listings, setListings] = useState<Tradesman[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [demotingId, setDemotingId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkLoading, setBulkLoading] = useState(false);
+
+  // Filters
+  const [filterCompleteness, setFilterCompleteness] = useState('all');
+  const [filterReachability, setFilterReachability] = useState('all');
+  const [filterSource, setFilterSource] = useState('all');
+  const [filterReview, setFilterReview] = useState('all');
+  const [filterMunicipality, setFilterMunicipality] = useState('all');
+
+  // Sort
+  const [sortScore, setSortScore] = useState<SortDir>(null);
 
   const fetchListings = async () => {
     setLoading(true);
@@ -139,85 +246,132 @@ const AdminListings = ({ onDemoted }: { onDemoted?: () => void }) => {
       toast.error(`Failed to update ${field}`);
       throw error;
     }
-    toast.success('Updated');
-    // Optimistic update
+    toast.success('Updated', { duration: 1500 });
     setListings(prev => prev.map(l => l.id === id ? { ...l, [field]: value } : l));
   };
 
   const toggleAvailability = async (listing: Tradesman) => {
-    const { error } = await supabase
-      .from('tradesmen')
-      .update({ is_available: !listing.is_available })
-      .eq('id', listing.id);
-
-    if (error) {
-      toast.error('Failed to update listing');
-    } else {
-      toast.success(listing.is_available ? 'Listing hidden' : 'Listing restored');
-      fetchListings();
-    }
+    const { error } = await supabase.from('tradesmen').update({ is_available: !listing.is_available }).eq('id', listing.id);
+    if (error) toast.error('Failed to update listing');
+    else { toast.success(listing.is_available ? 'Listing hidden' : 'Listing restored'); fetchListings(); }
   };
 
   const demoteToLead = async (listing: Tradesman) => {
     setDemotingId(listing.id);
     try {
-      const { error: insertError } = await supabase
-        .from('tradesman_leads')
-        .insert({
-          raw_name: listing.full_name,
-          clean_name: listing.full_name,
-          raw_phone: listing.whatsapp_number,
-          raw_bio: listing.bio,
-          clean_bio: listing.bio,
-          raw_location: listing.location,
-          clean_location: listing.location,
-          raw_trade: listing.trade_category,
-          raw_languages: listing.languages || [],
-          source: 'demoted',
-          status: 'pending',
-          admin_notes: `Demoted from tradesmen directory on ${new Date().toLocaleDateString()}`,
-        } as any);
-
+      const { error: insertError } = await supabase.from('tradesman_leads').insert({
+        raw_name: listing.full_name, clean_name: listing.full_name, raw_phone: listing.whatsapp_number,
+        raw_bio: listing.bio, clean_bio: listing.bio, raw_location: listing.location,
+        clean_location: listing.location, raw_trade: listing.trade_category,
+        raw_languages: listing.languages || [], source: 'demoted', status: 'pending',
+        admin_notes: `Demoted from tradesmen directory on ${new Date().toLocaleDateString()}`,
+      } as any);
       if (insertError) throw insertError;
-
-      await supabase
-        .from('tradesman_leads')
-        .update({ status: 'pending', approved_tradesman_id: null } as any)
-        .eq('approved_tradesman_id', listing.id);
-
-      const { error: deleteError } = await supabase
-        .from('tradesmen')
-        .delete()
-        .eq('id', listing.id);
-
+      await supabase.from('tradesman_leads').update({ status: 'pending', approved_tradesman_id: null } as any).eq('approved_tradesman_id', listing.id);
+      const { error: deleteError } = await supabase.from('tradesmen').delete().eq('id', listing.id);
       if (deleteError) throw deleteError;
-
-      toast.success(`"${listing.full_name}" demoted back to leads for re-review`);
+      toast.success(`"${listing.full_name}" demoted back to leads`);
       fetchListings();
       onDemoted?.();
-    } catch (err: any) {
-      toast.error('Demotion failed: ' + err.message);
-    } finally {
-      setDemotingId(null);
-    }
+    } catch (err: any) { toast.error('Demotion failed: ' + err.message); }
+    finally { setDemotingId(null); }
   };
 
   const deleteListing = async (id: string) => {
     const { error } = await supabase.from('tradesmen').delete().eq('id', id);
-    if (error) {
-      toast.error('Failed to delete listing: ' + error.message);
-    } else {
-      toast.success('Listing deleted');
+    if (error) toast.error('Failed to delete: ' + error.message);
+    else { toast.success('Listing deleted'); fetchListings(); }
+  };
+
+  // ─── Bulk actions ───────────────────────────────────────────────
+  const handleBulkAction = async (action: string, value?: string) => {
+    if (action === 'clear_selection') { setSelectedIds(new Set()); return; }
+
+    const ids = Array.from(selectedIds);
+    if (!ids.length) return;
+    setBulkLoading(true);
+
+    try {
+      let updatePayload: Record<string, any> = {};
+      switch (action) {
+        case 'mark_reviewed': updatePayload = { needs_review: false }; break;
+        case 'set_municipality': updatePayload = { municipality: value }; break;
+        case 'set_trade': updatePayload = { trade_category: value }; break;
+        case 'set_reachability': updatePayload = { whatsapp_reachable: value }; break;
+      }
+
+      const { error } = await supabase.from('tradesmen').update(updatePayload as any).in('id', ids);
+      if (error) throw error;
+
+      toast.success(`Updated ${ids.length} listing(s)`);
+      setSelectedIds(new Set());
       fetchListings();
+    } catch (err: any) {
+      toast.error('Bulk update failed: ' + err.message);
+    } finally {
+      setBulkLoading(false);
     }
   };
 
-  const filtered = listings.filter(l =>
-    l.full_name.toLowerCase().includes(search.toLowerCase()) ||
-    l.trade_category.toLowerCase().includes(search.toLowerCase()) ||
-    (l.location || '').toLowerCase().includes(search.toLowerCase()) ||
-    (l.municipality || '').toLowerCase().includes(search.toLowerCase())
-  );
+  // ─── Filtering + sorting ────────────────────────────────────────
+  const processed = useMemo(() => {
+    let result = listings.filter(l => {
+      const q = search.toLowerCase();
+      const matchesSearch = !q ||
+        l.full_name.toLowerCase().includes(q) ||
+        l.trade_category.toLowerCase().includes(q) ||
+        (l.location || '').toLowerCase().includes(q) ||
+        (l.municipality || '').toLowerCase().includes(q);
+      if (!matchesSearch) return false;
+
+      if (filterCompleteness !== 'all') {
+        if (filterCompleteness === 'high' && l.data_completeness_score < 80) return false;
+        if (filterCompleteness === 'medium' && (l.data_completeness_score < 50 || l.data_completeness_score >= 80)) return false;
+        if (filterCompleteness === 'low' && l.data_completeness_score >= 50) return false;
+      }
+      if (filterReachability !== 'all' && l.whatsapp_reachable !== filterReachability) return false;
+      if (filterSource !== 'all' && l.data_source !== filterSource) return false;
+      if (filterReview === 'yes' && !l.needs_review) return false;
+      if (filterReview === 'no' && l.needs_review) return false;
+      if (filterMunicipality === '_unset' && l.municipality) return false;
+      if (filterMunicipality !== 'all' && filterMunicipality !== '_unset' && l.municipality !== filterMunicipality) return false;
+
+      return true;
+    });
+
+    if (sortScore) {
+      result = [...result].sort((a, b) =>
+        sortScore === 'asc'
+          ? a.data_completeness_score - b.data_completeness_score
+          : b.data_completeness_score - a.data_completeness_score
+      );
+    }
+
+    return result;
+  }, [listings, search, filterCompleteness, filterReachability, filterSource, filterReview, filterMunicipality, sortScore]);
+
+  const allVisibleSelected = processed.length > 0 && processed.every(l => selectedIds.has(l.id));
+  const toggleSelectAll = () => {
+    if (allVisibleSelected) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(processed.map(l => l.id)));
+    }
+  };
+
+  const hasActiveFilters = filterCompleteness !== 'all' || filterReachability !== 'all' || filterSource !== 'all' || filterReview !== 'all' || filterMunicipality !== 'all';
+
+  const clearFilters = () => {
+    setFilterCompleteness('all');
+    setFilterReachability('all');
+    setFilterSource('all');
+    setFilterReview('all');
+    setFilterMunicipality('all');
+  };
+
+  const cycleSortScore = () => {
+    setSortScore(prev => prev === null ? 'desc' : prev === 'desc' ? 'asc' : null);
+  };
 
   return (
     <TooltipProvider delayDuration={200}>
@@ -227,7 +381,8 @@ const AdminListings = ({ onDemoted }: { onDemoted?: () => void }) => {
           <CardDescription>Manage directory listings. Click any field to edit inline.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="mb-4 flex items-center gap-2">
+          {/* Search */}
+          <div className="mb-3 flex items-center gap-2">
             <Search className="h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search by name, trade, location, or municipality…"
@@ -237,6 +392,39 @@ const AdminListings = ({ onDemoted }: { onDemoted?: () => void }) => {
             />
           </div>
 
+          {/* Filter bar */}
+          <div className="mb-3 flex items-center gap-2 flex-wrap">
+            <FilterSelect label="Quality" value={filterCompleteness} onChange={setFilterCompleteness} options={[
+              { value: 'all', label: 'All' }, { value: 'high', label: 'High (80+)' },
+              { value: 'medium', label: 'Medium (50-79)' }, { value: 'low', label: 'Low (<50)' },
+            ]} />
+            <FilterSelect label="WhatsApp" value={filterReachability} onChange={setFilterReachability} options={[
+              { value: 'all', label: 'All' }, ...REACHABILITY_OPTIONS,
+            ]} />
+            <FilterSelect label="Source" value={filterSource} onChange={setFilterSource} options={[
+              { value: 'all', label: 'All' }, { value: 'manual', label: 'Manual' },
+              { value: 'scraped', label: 'Scraped' }, { value: 'bulk_import', label: 'Bulk Import' },
+              { value: 'onboarded', label: 'Onboarded' },
+            ]} />
+            <FilterSelect label="Review" value={filterReview} onChange={setFilterReview} options={[
+              { value: 'all', label: 'All' }, { value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' },
+            ]} />
+            <FilterSelect label="Municipality" value={filterMunicipality} onChange={setFilterMunicipality} options={[
+              { value: 'all', label: 'All' }, { value: '_unset', label: 'Unset' },
+              ...MUNICIPALITY_OPTIONS,
+            ]} />
+            {hasActiveFilters && (
+              <Button variant="ghost" size="sm" className="h-8 text-xs" onClick={clearFilters}>
+                <X className="h-3 w-3 mr-1" /> Clear filters
+              </Button>
+            )}
+          </div>
+
+          {/* Bulk action bar */}
+          {selectedIds.size > 0 && (
+            <BulkActionBar count={selectedIds.size} onAction={handleBulkAction} loading={bulkLoading} />
+          )}
+
           {loading ? (
             <p className="py-8 text-center text-muted-foreground">Loading…</p>
           ) : (
@@ -244,11 +432,22 @@ const AdminListings = ({ onDemoted }: { onDemoted?: () => void }) => {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="w-[40px]">
+                      <Checkbox checked={allVisibleSelected} onCheckedChange={toggleSelectAll} aria-label="Select all" />
+                    </TableHead>
                     <TableHead className="w-[200px]">Name</TableHead>
                     <TableHead>Trade</TableHead>
                     <TableHead>Location</TableHead>
                     <TableHead className="w-[60px]">
                       <MessageSquare className="h-3.5 w-3.5" />
+                    </TableHead>
+                    <TableHead className="cursor-pointer select-none" onClick={cycleSortScore}>
+                      <div className="flex items-center gap-1">
+                        Score
+                        {sortScore === null && <ArrowUpDown className="h-3 w-3 text-muted-foreground/50" />}
+                        {sortScore === 'desc' && <ArrowDown className="h-3 w-3" />}
+                        {sortScore === 'asc' && <ArrowUp className="h-3 w-3" />}
+                      </div>
                     </TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="w-[50px]">Views</TableHead>
@@ -256,24 +455,36 @@ const AdminListings = ({ onDemoted }: { onDemoted?: () => void }) => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filtered.length === 0 ? (
+                  {processed.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={7} className="py-8 text-center text-muted-foreground">
+                      <TableCell colSpan={9} className="py-8 text-center text-muted-foreground">
                         No listings found.
                       </TableCell>
                     </TableRow>
                   ) : (
-                    filtered.map(l => {
+                    processed.map(l => {
                       const missing = getMissingFields(l);
                       const isExpanded = expandedId === l.id;
+                      const isSelected = selectedIds.has(l.id);
 
                       return (
-                        <>
-                          <TableRow key={l.id} className={cn(!l.is_available && 'opacity-50')}>
+                        <Fragment key={l.id}>
+                          <TableRow className={cn(!l.is_available && 'opacity-50', isSelected && 'bg-primary/5')}>
+                            {/* Checkbox */}
+                            <TableCell>
+                              <Checkbox
+                                checked={isSelected}
+                                onCheckedChange={(checked) => {
+                                  const next = new Set(selectedIds);
+                                  checked ? next.add(l.id) : next.delete(l.id);
+                                  setSelectedIds(next);
+                                }}
+                              />
+                            </TableCell>
+
                             {/* NAME + BADGES */}
                             <TableCell>
                               <div className="flex items-center gap-2">
-                                {/* Completeness dot */}
                                 <Tooltip>
                                   <TooltipTrigger asChild>
                                     <span className={cn('h-2.5 w-2.5 rounded-full shrink-0', getCompletenessColor(l.data_completeness_score))} />
@@ -289,52 +500,38 @@ const AdminListings = ({ onDemoted }: { onDemoted?: () => void }) => {
                                     )}
                                   </TooltipContent>
                                 </Tooltip>
-
                                 <span className="font-medium text-sm">{l.full_name}</span>
                               </div>
-
                               <div className="flex items-center gap-1 mt-1 flex-wrap">
-                                {l.is_claimed && (
-                                  <Badge variant="secondary" className="text-[10px] px-1.5 py-0">Claimed</Badge>
-                                )}
-                                {l.needs_review && (
-                                  <Badge className="bg-amber-500/15 text-amber-700 border-amber-200 text-[10px] px-1.5 py-0">
-                                    Review
-                                  </Badge>
-                                )}
-                                <Badge
-                                  variant="outline"
-                                  className={cn('text-[10px] px-1.5 py-0', SOURCE_STYLES[l.data_source] || SOURCE_STYLES.manual)}
-                                >
+                                {l.is_claimed && <Badge variant="secondary" className="text-[10px] px-1.5 py-0">Claimed</Badge>}
+                                {l.needs_review && <Badge className="bg-amber-500/15 text-amber-700 border-amber-200 text-[10px] px-1.5 py-0">Review</Badge>}
+                                <Badge variant="outline" className={cn('text-[10px] px-1.5 py-0', SOURCE_STYLES[l.data_source] || SOURCE_STYLES.manual)}>
                                   {l.data_source}
                                 </Badge>
                               </div>
                             </TableCell>
 
-                            {/* TRADE - inline editable */}
+                            {/* TRADE */}
                             <TableCell>
-                              <InlineEditCell
-                                value={l.trade_category}
-                                field="trade_category"
-                                mode="select"
+                              <InlineEditCell value={l.trade_category} field="trade_category" mode="select"
                                 options={TRADE_CATEGORIES.map(c => ({ value: c.value, label: c.label }))}
-                                onSave={(f, v) => handleInlineSave(l.id, f, v)}
-                              />
+                                onSave={(f, v) => handleInlineSave(l.id, f, v)} />
                             </TableCell>
 
-                            {/* LOCATION - inline editable */}
+                            {/* LOCATION */}
                             <TableCell>
-                              <InlineEditCell
-                                value={l.location}
-                                field="location"
-                                mode="text"
-                                onSave={(f, v) => handleInlineSave(l.id, f, v)}
-                              />
+                              <InlineEditCell value={l.location} field="location" mode="text"
+                                onSave={(f, v) => handleInlineSave(l.id, f, v)} />
                             </TableCell>
 
-                            {/* WHATSAPP REACHABILITY */}
+                            {/* WHATSAPP */}
                             <TableCell>
                               <WhatsAppIcon status={l.whatsapp_reachable} checkedAt={l.whatsapp_checked_at} />
+                            </TableCell>
+
+                            {/* SCORE */}
+                            <TableCell>
+                              <span className="text-sm tabular-nums text-muted-foreground">{l.data_completeness_score}%</span>
                             </TableCell>
 
                             {/* STATUS */}
@@ -352,12 +549,7 @@ const AdminListings = ({ onDemoted }: { onDemoted?: () => void }) => {
                             {/* ACTIONS */}
                             <TableCell className="text-right">
                               <div className="flex items-center justify-end gap-1">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="h-7 px-2"
-                                  onClick={() => setExpandedId(isExpanded ? null : l.id)}
-                                >
+                                <Button variant="ghost" size="sm" className="h-7 px-2" onClick={() => setExpandedId(isExpanded ? null : l.id)}>
                                   {isExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                                 </Button>
                                 <Button variant="ghost" size="sm" className="h-7 px-2" onClick={() => toggleAvailability(l)}>
@@ -374,15 +566,13 @@ const AdminListings = ({ onDemoted }: { onDemoted?: () => void }) => {
                                     <AlertDialogHeader>
                                       <AlertDialogTitle>Demote to lead?</AlertDialogTitle>
                                       <AlertDialogDescription>
-                                        This will remove "{l.full_name}" from the public directory and create a new lead for re-review.
-                                        {l.is_claimed && ' Warning: this tradesman has claimed their profile — their account link will be broken.'}
+                                        Remove "{l.full_name}" from the directory and create a new lead for re-review.
+                                        {l.is_claimed && ' Warning: claimed profile — account link will break.'}
                                       </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                      <AlertDialogAction onClick={() => demoteToLead(l)} className="bg-amber-600 text-white hover:bg-amber-700">
-                                        Demote to Lead
-                                      </AlertDialogAction>
+                                      <AlertDialogAction onClick={() => demoteToLead(l)} className="bg-amber-600 text-white hover:bg-amber-700">Demote</AlertDialogAction>
                                     </AlertDialogFooter>
                                   </AlertDialogContent>
                                 </AlertDialog>
@@ -396,15 +586,11 @@ const AdminListings = ({ onDemoted }: { onDemoted?: () => void }) => {
                                   <AlertDialogContent>
                                     <AlertDialogHeader>
                                       <AlertDialogTitle>Delete listing?</AlertDialogTitle>
-                                      <AlertDialogDescription>
-                                        This will permanently remove "{l.full_name}" from the directory. This cannot be undone.
-                                      </AlertDialogDescription>
+                                      <AlertDialogDescription>Permanently remove "{l.full_name}". This cannot be undone.</AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                      <AlertDialogAction onClick={() => deleteListing(l.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                                        Delete
-                                      </AlertDialogAction>
+                                      <AlertDialogAction onClick={() => deleteListing(l.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Delete</AlertDialogAction>
                                     </AlertDialogFooter>
                                   </AlertDialogContent>
                                 </AlertDialog>
@@ -414,8 +600,8 @@ const AdminListings = ({ onDemoted }: { onDemoted?: () => void }) => {
 
                           {/* EXPANDED DETAIL ROW */}
                           {isExpanded && (
-                            <TableRow key={`${l.id}-detail`} className="bg-muted/30 hover:bg-muted/30">
-                              <TableCell colSpan={7} className="p-4">
+                            <TableRow className="bg-muted/30 hover:bg-muted/30">
+                              <TableCell colSpan={9} className="p-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3">
                                   <div>
                                     <label className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Bio</label>
@@ -423,7 +609,7 @@ const AdminListings = ({ onDemoted }: { onDemoted?: () => void }) => {
                                   </div>
                                   <div>
                                     <label className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Municipality</label>
-                                    <InlineEditCell value={l.municipality} field="municipality" mode="text" onSave={(f, v) => handleInlineSave(l.id, f, v)} placeholder="Not set" />
+                                    <InlineEditCell value={l.municipality} field="municipality" mode="select" options={MUNICIPALITY_OPTIONS} onSave={(f, v) => handleInlineSave(l.id, f, v)} placeholder="Not set" />
                                   </div>
                                   <div>
                                     <label className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Contact Method</label>
@@ -438,14 +624,8 @@ const AdminListings = ({ onDemoted }: { onDemoted?: () => void }) => {
                                     <InlineEditCell value={l.languages} field="languages" mode="multi-select" options={LANGUAGES.map(lg => ({ value: lg.value, label: lg.label }))} onSave={(f, v) => handleInlineSave(l.id, f, v)} />
                                   </div>
                                   <div>
-                                    <label className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Services</label>
-                                    <InlineEditCell value={l.services} field="services" mode="textarea" onSave={(f, v) => {
-                                      // Convert comma-separated text back to array
-                                      const arr = typeof v === 'string'
-                                        ? v.split(',').map(s => s.trim()).filter(Boolean)
-                                        : v;
-                                      return handleInlineSave(l.id, f, arr);
-                                    }} placeholder="No services" />
+                                    <label className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Services (comma-separated)</label>
+                                    <InlineEditCell value={l.services} field="services" mode="comma-list" onSave={(f, v) => handleInlineSave(l.id, f, v)} placeholder="No services" />
                                   </div>
                                   <div className="md:col-span-2 lg:col-span-3">
                                     <label className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Admin Notes</label>
@@ -455,7 +635,7 @@ const AdminListings = ({ onDemoted }: { onDemoted?: () => void }) => {
                               </TableCell>
                             </TableRow>
                           )}
-                        </>
+                        </Fragment>
                       );
                     })
                   )}

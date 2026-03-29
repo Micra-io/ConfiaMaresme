@@ -1,0 +1,35 @@
+export const MARESME_MUNICIPALITIES = [
+  'Alella',
+  'Arenys de Mar',
+  'Arenys de Munt',
+  'Argentona',
+  'Cabrera de Mar',
+  'Cabrils',
+  "Caldes d'Estrac",
+  'Calella',
+  'Canet de Mar',
+  'Dosrius',
+  'El Masnou',
+  'Malgrat de Mar',
+  'Mataró',
+  'Montgat',
+  'Òrrius',
+  'Palafolls',
+  'Pineda de Mar',
+  'Premià de Dalt',
+  'Premià de Mar',
+  'Sant Andreu de Llavaneres',
+  'Sant Cebrià de Vallalta',
+  'Sant Iscle de Vallalta',
+  'Sant Pol de Mar',
+  'Sant Vicenç de Montalt',
+  'Santa Susanna',
+  'Teià',
+  'Tiana',
+  'Vilassar de Dalt',
+  'Vilassar de Mar',
+] as const;
+
+export type MaresmeMunicipality = typeof MARESME_MUNICIPALITIES[number];
+
+export const MUNICIPALITY_OPTIONS = MARESME_MUNICIPALITIES.map(m => ({ value: m, label: m }));

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Check, X, Pencil } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-type EditMode = 'text' | 'textarea' | 'select' | 'multi-select';
+export type EditMode = 'text' | 'textarea' | 'select' | 'multi-select' | 'comma-list';
 
 interface InlineEditCellProps {
   value: string | string[] | null;
@@ -20,9 +20,16 @@ interface InlineEditCellProps {
 
 const InlineEditCell = ({ value, field, mode, options, onSave, placeholder = 'â€”', className }: InlineEditCellProps) => {
   const [editing, setEditing] = useState(false);
-  const [draft, setDraft] = useState<string | string[]>(value ?? (mode === 'multi-select' ? [] : ''));
+  const initDraft = useCallback(() => {
+    if (mode === 'multi-select') return value ?? [];
+    if (mode === 'comma-list') return Array.isArray(value) ? (value as string[]).join(', ') : (value ?? '');
+    return value ?? '';
+  }, [value, mode]);
+
+  const [draft, setDraft] = useState<string | string[]>(initDraft);
   const [saving, setSaving] = useState(false);
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (editing && inputRef.current) {
@@ -30,21 +37,27 @@ const InlineEditCell = ({ value, field, mode, options, onSave, placeholder = 'â€
     }
   }, [editing]);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
+    if (saving) return;
     setSaving(true);
     try {
-      const saveValue = mode === 'multi-select'
-        ? (draft as string[])
-        : (draft as string).trim() || null;
+      let saveValue: string | string[] | null;
+      if (mode === 'multi-select') {
+        saveValue = draft as string[];
+      } else if (mode === 'comma-list') {
+        saveValue = (draft as string).split(',').map(s => s.trim()).filter(Boolean);
+      } else {
+        saveValue = (draft as string).trim() || null;
+      }
       await onSave(field, saveValue);
       setEditing(false);
     } finally {
       setSaving(false);
     }
-  };
+  }, [draft, field, mode, onSave, saving]);
 
   const handleCancel = () => {
-    setDraft(value ?? (mode === 'multi-select' ? [] : ''));
+    setDraft(initDraft());
     setEditing(false);
   };
 
@@ -56,17 +69,24 @@ const InlineEditCell = ({ value, field, mode, options, onSave, placeholder = 'â€
     if (e.key === 'Escape') handleCancel();
   };
 
+  const handleBlur = useCallback((e: React.FocusEvent) => {
+    // Don't save if clicking within the same edit container (e.g. save/cancel buttons)
+    if (containerRef.current?.contains(e.relatedTarget as Node)) return;
+    if (mode === 'text' || mode === 'comma-list') {
+      handleSave();
+    }
+  }, [handleSave, mode]);
+
   if (!editing) {
     const displayValue = mode === 'multi-select'
       ? (value as string[] | null)?.length
-        ? (value as string[]).map(v => {
-            const opt = options?.find(o => o.value === v);
-            return opt?.label ?? v;
-          }).join(', ')
+        ? (value as string[]).map(v => options?.find(o => o.value === v)?.label ?? v).join(', ')
         : null
-      : mode === 'select'
-        ? options?.find(o => o.value === (value as string))?.label ?? value
-        : value;
+      : mode === 'comma-list'
+        ? Array.isArray(value) && value.length ? value.join(', ') : null
+        : mode === 'select'
+          ? options?.find(o => o.value === (value as string))?.label ?? value
+          : value;
 
     return (
       <div
@@ -75,7 +95,7 @@ const InlineEditCell = ({ value, field, mode, options, onSave, placeholder = 'â€
           className
         )}
         onClick={() => {
-          setDraft(value ?? (mode === 'multi-select' ? [] : ''));
+          setDraft(initDraft());
           setEditing(true);
         }}
       >
@@ -89,14 +109,9 @@ const InlineEditCell = ({ value, field, mode, options, onSave, placeholder = 'â€
 
   if (mode === 'select') {
     return (
-      <div className="flex items-center gap-1">
-        <Select
-          value={draft as string}
-          onValueChange={(v) => {
-            setDraft(v);
-          }}
-        >
-          <SelectTrigger className="h-7 text-xs w-[140px]">
+      <div ref={containerRef} className="flex items-center gap-1">
+        <Select value={draft as string} onValueChange={(v) => setDraft(v)}>
+          <SelectTrigger className="h-7 text-xs w-[160px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -105,12 +120,8 @@ const InlineEditCell = ({ value, field, mode, options, onSave, placeholder = 'â€
             ))}
           </SelectContent>
         </Select>
-        <button onClick={handleSave} disabled={saving} className="text-emerald-600 hover:text-emerald-700">
-          <Check className="h-3.5 w-3.5" />
-        </button>
-        <button onClick={handleCancel} className="text-muted-foreground hover:text-foreground">
-          <X className="h-3.5 w-3.5" />
-        </button>
+        <button onClick={handleSave} disabled={saving} className="text-emerald-600 hover:text-emerald-700"><Check className="h-3.5 w-3.5" /></button>
+        <button onClick={handleCancel} className="text-muted-foreground hover:text-foreground"><X className="h-3.5 w-3.5" /></button>
       </div>
     );
   }
@@ -118,35 +129,22 @@ const InlineEditCell = ({ value, field, mode, options, onSave, placeholder = 'â€
   if (mode === 'multi-select') {
     const selected = draft as string[];
     return (
-      <div className="space-y-1">
+      <div ref={containerRef} className="space-y-1">
         <div className="flex flex-wrap gap-1">
           {options?.map(o => (
             <Badge
               key={o.value}
               variant={selected.includes(o.value) ? 'default' : 'outline'}
-              className={cn(
-                'cursor-pointer text-[10px] px-1.5 py-0',
-                selected.includes(o.value) ? 'bg-primary' : 'opacity-50 hover:opacity-100'
-              )}
-              onClick={() => {
-                setDraft(
-                  selected.includes(o.value)
-                    ? selected.filter(v => v !== o.value)
-                    : [...selected, o.value]
-                );
-              }}
+              className={cn('cursor-pointer text-[10px] px-1.5 py-0', selected.includes(o.value) ? 'bg-primary' : 'opacity-50 hover:opacity-100')}
+              onClick={() => setDraft(selected.includes(o.value) ? selected.filter(v => v !== o.value) : [...selected, o.value])}
             >
               {o.label}
             </Badge>
           ))}
         </div>
         <div className="flex gap-1">
-          <button onClick={handleSave} disabled={saving} className="text-emerald-600 hover:text-emerald-700">
-            <Check className="h-3.5 w-3.5" />
-          </button>
-          <button onClick={handleCancel} className="text-muted-foreground hover:text-foreground">
-            <X className="h-3.5 w-3.5" />
-          </button>
+          <button onClick={handleSave} disabled={saving} className="text-emerald-600 hover:text-emerald-700"><Check className="h-3.5 w-3.5" /></button>
+          <button onClick={handleCancel} className="text-muted-foreground hover:text-foreground"><X className="h-3.5 w-3.5" /></button>
         </div>
       </div>
     );
@@ -154,7 +152,7 @@ const InlineEditCell = ({ value, field, mode, options, onSave, placeholder = 'â€
 
   if (mode === 'textarea') {
     return (
-      <div className="space-y-1">
+      <div ref={containerRef} className="space-y-1">
         <Textarea
           ref={inputRef as React.RefObject<HTMLTextAreaElement>}
           value={draft as string}
@@ -164,20 +162,16 @@ const InlineEditCell = ({ value, field, mode, options, onSave, placeholder = 'â€
           disabled={saving}
         />
         <div className="flex gap-1">
-          <button onClick={handleSave} disabled={saving} className="text-emerald-600 hover:text-emerald-700">
-            <Check className="h-3.5 w-3.5" />
-          </button>
-          <button onClick={handleCancel} className="text-muted-foreground hover:text-foreground">
-            <X className="h-3.5 w-3.5" />
-          </button>
+          <button onClick={handleSave} disabled={saving} className="text-emerald-600 hover:text-emerald-700"><Check className="h-3.5 w-3.5" /></button>
+          <button onClick={handleCancel} className="text-muted-foreground hover:text-foreground"><X className="h-3.5 w-3.5" /></button>
         </div>
       </div>
     );
   }
 
-  // text mode
+  // text and comma-list modes â€” save on blur
   return (
-    <div className="flex items-center gap-1">
+    <div ref={containerRef} className="flex items-center gap-1" onBlur={handleBlur}>
       <Input
         ref={inputRef as React.RefObject<HTMLInputElement>}
         value={draft as string}
@@ -185,13 +179,10 @@ const InlineEditCell = ({ value, field, mode, options, onSave, placeholder = 'â€
         onKeyDown={handleKeyDown}
         className="h-7 text-xs"
         disabled={saving}
+        placeholder={mode === 'comma-list' ? 'item1, item2, â€¦' : undefined}
       />
-      <button onClick={handleSave} disabled={saving} className="text-emerald-600 hover:text-emerald-700">
-        <Check className="h-3.5 w-3.5" />
-      </button>
-      <button onClick={handleCancel} className="text-muted-foreground hover:text-foreground">
-        <X className="h-3.5 w-3.5" />
-      </button>
+      <button onClick={handleSave} disabled={saving} className="text-emerald-600 hover:text-emerald-700"><Check className="h-3.5 w-3.5" /></button>
+      <button onClick={handleCancel} className="text-muted-foreground hover:text-foreground"><X className="h-3.5 w-3.5" /></button>
     </div>
   );
 };
