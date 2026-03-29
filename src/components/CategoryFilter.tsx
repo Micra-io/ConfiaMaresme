@@ -25,9 +25,9 @@ const CategoryFilter = ({ selected, onSelect }: CategoryFilterProps) => {
       <div className="flex gap-2 pb-2">
         <Button
           variant={selected === null ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => onSelect(null)}
-          className="shrink-0"
+              size="default"
+              onClick={() => onSelect(null)}
+              className="shrink-0"
         >
           {t('categories.all')}
         </Button>
