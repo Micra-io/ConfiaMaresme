@@ -36,6 +36,15 @@
     "unlocking": "Desbloqueando...",
     "contactWhatsApp": "Contactar por WhatsApp"
   },
+  "contact": {
+    "whatsapp": "WhatsApp",
+    "call": "Llamar",
+    "sms": "SMS",
+    "email": "Email",
+    "callFallback": "O llama directamente",
+    "unavailable": "Contacto temporalmente no disponible",
+    "unavailableUnlock": "Estamos actualizando la información de contacto de este profesional. Vuelve a consultar más tarde."
+  },
   "profile": {
     "notFound": "Profesional no encontrado.",
     "backToDirectory": "Volver al directorio",
