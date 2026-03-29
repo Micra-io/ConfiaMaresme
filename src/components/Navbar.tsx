@@ -184,8 +184,8 @@ const Navbar = () => {
               <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="text-base font-medium">{dashboardLabel}</Link>
             )}
             {showAdmin && (
-              <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-1.5 text-sm font-medium">
-                <ShieldCheck className="h-3.5 w-3.5" /> Admin Dashboard
+              <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-1.5 text-base font-medium">
+                <ShieldCheck className="h-4 w-4" /> Admin Dashboard
               </Link>
             )}
             {user ? (
