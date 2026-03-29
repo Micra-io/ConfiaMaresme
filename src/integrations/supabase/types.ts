@@ -105,6 +105,35 @@ export type Database = {
           },
         ]
       }
+      saved_tradesmen: {
+        Row: {
+          created_at: string
+          id: string
+          resident_id: string
+          tradesman_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          resident_id: string
+          tradesman_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          resident_id?: string
+          tradesman_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_tradesmen_tradesman_id_fkey"
+            columns: ["tradesman_id"]
+            isOneToOne: false
+            referencedRelation: "tradesmen"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tradesman_leads: {
         Row: {
           admin_notes: string | null
