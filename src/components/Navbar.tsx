@@ -149,19 +149,19 @@ const Navbar = () => {
         <div className="flex items-center gap-2 md:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="gap-1">
-                <Globe className="h-4 w-4" />
-                {currentLang.code === 'ca' ? <CatalanFlag /> : <span className="text-xs">{currentLang.flag}</span>}
+              <Button variant="ghost" size="default" className="gap-1.5 text-base">
+                <Globe className="h-5 w-5" />
+                {currentLang.code === 'ca' ? <CatalanFlag /> : <span className="text-base">{currentLang.flag}</span>}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="text-base">
               {UI_LANGUAGES.map((lang) => (
                 <DropdownMenuItem
                   key={lang.code}
                   onClick={() => i18n.changeLanguage(lang.code)}
-                  className={i18n.language === lang.code ? 'bg-accent' : ''}
+                  className={`text-base ${i18n.language === lang.code ? 'bg-accent' : ''}`}
                 >
-                  <span className="mr-2">{lang.code === 'ca' ? <CatalanFlag /> : lang.flag}</span>
+                  <span className="mr-2 text-base">{lang.code === 'ca' ? <CatalanFlag /> : lang.flag}</span>
                   {lang.label}
                 </DropdownMenuItem>
               ))}
