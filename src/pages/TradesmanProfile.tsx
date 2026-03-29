@@ -5,14 +5,21 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowLeft, MapPin, MessageCircle, ShieldCheck, User, Phone, Lock, Star } from 'lucide-react';
+import { ArrowLeft, MapPin, MessageCircle, ShieldCheck, User, Phone, Lock, Star, MessageSquare, Mail } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useUnlockContact } from '@/hooks/useUnlockContact';
 import UnlockContactModal from '@/components/UnlockContactModal';
 import { formatDistanceToNow } from 'date-fns';
 import { es, ca, enUS, ru } from 'date-fns/locale';
+import { getPrimaryContact, getSecondaryContact, isContactUnavailable } from '@/lib/contactMethod';
 
 const dateFnsLocales: Record<string, typeof es> = { es, ca, en: enUS, ru };
+
+const ContactIcon = ({ name, className }: { name: string; className?: string }) => {
+  const icons: Record<string, React.ElementType> = { MessageCircle, Phone, MessageSquare, Mail };
+  const Icon = icons[name];
+  return Icon ? <Icon className={className} /> : null;
+};
 
 const StarRating = ({ rating }: { rating: number }) => (
   <div className="flex gap-0.5">
@@ -94,9 +101,16 @@ const TradesmanProfile = () => {
     );
   }
 
-  const whatsappLink = tradesman.whatsapp_number
-    ? `https://wa.me/${tradesman.whatsapp_number.replace(/\D/g, '')}`
-    : null;
+  const contactData = {
+    whatsapp_reachable: tradesman.whatsapp_reachable || 'unknown',
+    contact_method: tradesman.contact_method || 'whatsapp',
+    whatsapp_number: tradesman.whatsapp_number,
+    alternate_contact: tradesman.alternate_contact,
+  };
+
+  const primary = getPrimaryContact(contactData);
+  const secondary = getSecondaryContact(contactData);
+  const unavailable = primary.type === 'unavailable';
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-10">
@@ -182,20 +196,30 @@ const TradesmanProfile = () => {
             </div>
           )}
 
+          {/* Contact section */}
           <div className="mt-8">
-            {isUnlocked ? (
+            {unavailable ? (
+              <div className="rounded-lg border-2 border-dashed border-muted-foreground/20 bg-muted/50 p-6 text-center">
+                <p className="text-sm text-muted-foreground">{t('contact.unavailable')}</p>
+              </div>
+            ) : isUnlocked ? (
               <div className="space-y-3">
-                {whatsappLink && (
-                  <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-                    <Button size="lg" className="gap-2 bg-success text-success-foreground hover:bg-success/90">
-                      <MessageCircle className="h-5 w-5" /> {t('profile.contactWhatsApp')}
+                {primary.href && (
+                  <a href={primary.href} target="_blank" rel="noopener noreferrer">
+                    <Button size="lg" className={`gap-2 ${primary.colorClass}`}>
+                      <ContactIcon name={primary.iconName} className="h-5 w-5" /> {t(primary.labelKey)}
                     </Button>
                   </a>
                 )}
-                {tradesman.whatsapp_number && (
+                {tradesman.whatsapp_number && isUnlocked && (
                   <div className="mt-3 flex items-center gap-1.5 text-sm text-muted-foreground">
                     <Phone className="h-3.5 w-3.5" /> {tradesman.whatsapp_number}
                   </div>
+                )}
+                {secondary && secondary.href && (
+                  <a href={secondary.href} className="mt-2 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+                    <ContactIcon name={secondary.iconName} className="h-3.5 w-3.5" /> {t(secondary.labelKey)}
+                  </a>
                 )}
               </div>
             ) : (

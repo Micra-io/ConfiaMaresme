@@ -2,10 +2,17 @@ import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { MapPin, ShieldCheck, User, Lock, MessageCircle } from 'lucide-react';
+import { MapPin, ShieldCheck, User, Lock, MessageCircle, Phone, MessageSquare, Mail } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useUnlockContact } from '@/hooks/useUnlockContact';
 import UnlockContactModal from '@/components/UnlockContactModal';
+import { getPrimaryContact, isContactUnavailable } from '@/lib/contactMethod';
+
+const ContactIcon = ({ name, className }: { name: string; className?: string }) => {
+  const icons: Record<string, React.ElementType> = { MessageCircle, Phone, MessageSquare, Mail };
+  const Icon = icons[name];
+  return Icon ? <Icon className={className} /> : null;
+};
 
 interface TradesmanCardProps {
   tradesman: {
@@ -20,6 +27,9 @@ interface TradesmanCardProps {
     vetted_by_community: boolean;
     is_available: boolean;
     whatsapp_number: string | null;
+    whatsapp_reachable?: string;
+    contact_method?: string;
+    alternate_contact?: string | null;
   };
 }
 
@@ -28,14 +38,26 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
   const { isUnlocked, isUnlocking, handleUnlock, showAuthModal, setShowAuthModal } =
     useUnlockContact(tradesman.id);
 
-  const whatsappLink = tradesman.whatsapp_number
-    ? `https://wa.me/${tradesman.whatsapp_number.replace(/\D/g, '')}`
-    : null;
+  const contact = getPrimaryContact({
+    whatsapp_reachable: tradesman.whatsapp_reachable || 'unknown',
+    contact_method: tradesman.contact_method || 'whatsapp',
+    whatsapp_number: tradesman.whatsapp_number,
+    alternate_contact: tradesman.alternate_contact,
+  });
+
+  const unavailable = contact.type === 'unavailable';
 
   return (
     <>
       <Card className="group h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-        <CardContent className="flex flex-col gap-4 p-5">
+        <CardContent className="relative flex flex-col gap-4 p-5">
+          {/* Contact method badge in corner */}
+          {!unavailable && (
+            <div className="absolute right-4 top-4">
+              <ContactIcon name={contact.iconName} className={`h-4 w-4 ${contact.badgeColorClass}`} />
+            </div>
+          )}
+
           <Link to={`/tradesman/${tradesman.id}`}>
             <div className="flex items-start gap-4">
               <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted">
@@ -45,7 +67,7 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
                   <User className="h-6 w-6 text-muted-foreground" />
                 )}
               </div>
-              <div className="min-w-0 flex-1">
+              <div className="min-w-0 flex-1 pr-6">
                 <h3 className="truncate font-display text-xl font-semibold text-foreground group-hover:text-primary">
                   {tradesman.full_name}
                 </h3>
@@ -86,13 +108,15 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
             </div>
           </Link>
 
-          {isUnlocked && whatsappLink ? (
-            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-              <Button size="sm" className="w-full gap-2 bg-success text-success-foreground hover:bg-success/90">
-                <MessageCircle className="h-4 w-4" /> {t('card.contactWhatsApp')}
+          {unavailable ? (
+            <p className="text-center text-sm text-muted-foreground">{t('contact.unavailable')}</p>
+          ) : isUnlocked && contact.href ? (
+            <a href={contact.href} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+              <Button size="sm" className={`w-full gap-2 ${contact.colorClass}`}>
+                <ContactIcon name={contact.iconName} className="h-4 w-4" /> {t(contact.labelKey)}
               </Button>
             </a>
-          ) : (
+          ) : !isUnlocked ? (
             <Button
               size="sm"
               variant="outline"
@@ -106,6 +130,8 @@ const TradesmanCard = ({ tradesman }: TradesmanCardProps) => {
               <Lock className="h-4 w-4 shrink-0" />
               {isUnlocking ? t('card.unlocking') : t('card.unlockContact')}
             </Button>
+          ) : (
+            <p className="text-center text-sm text-muted-foreground">{t('contact.unavailable')}</p>
           )}
         </CardContent>
       </Card>
