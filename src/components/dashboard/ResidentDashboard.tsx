@@ -297,6 +297,7 @@ const ResidentDashboard = () => {
               <p className="text-sm font-medium text-muted-foreground">{t('auth.email')}</p>
               <p className="text-base font-medium">{user?.email}</p>
             </div>
+            <WhatsAppSettingsSection />
             <div className="flex gap-3">
               <Link to="/claim">
                 <Button variant="outline">{t('dashboard.claimProfile')}</Button>
