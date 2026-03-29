@@ -14,7 +14,7 @@ const Footer = () => {
             </p>
             <p className="mt-1 text-base text-muted-foreground">{t('footer.tagline')}</p>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-base text-muted-foreground">
             <Link to="/" className="hover:text-foreground transition-colors">{t('nav.directory')}</Link>
             <Link to="/auth" className="hover:text-foreground transition-colors">{t('nav.signIn')}</Link>
             <Link to="/claim" className="hover:text-foreground transition-colors">{t('claim.title')}</Link>
