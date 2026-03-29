@@ -194,9 +194,9 @@ const Navbar = () => {
                   <Avatar className="h-6 w-6">
                     <AvatarFallback className="bg-primary text-xs text-primary-foreground">{initials}</AvatarFallback>
                   </Avatar>
-                  <span className="truncate text-sm text-muted-foreground">{user.email}</span>
+                  <span className="truncate text-base text-muted-foreground">{user.email}</span>
                 </div>
-                <button onClick={() => { handleSignOut(); setMobileOpen(false); }} className="text-left text-sm font-medium text-destructive">{t('nav.signOut')}</button>
+                <button onClick={() => { handleSignOut(); setMobileOpen(false); }} className="text-left text-base font-medium text-destructive">{t('nav.signOut')}</button>
               </>
             ) : (
               <Link to="/auth" onClick={() => setMobileOpen(false)} className="text-sm font-medium text-primary">{t('nav.signIn')}</Link>
