@@ -50,6 +50,12 @@
     --success-foreground: 0 0% 100%;
     --badge-community: 160 35% 45%;
     --hero-overlay: 210 65% 28%;
+
+    /* Contact method tokens */
+    --contact-call: 210 75% 50%;
+    --contact-call-foreground: 0 0% 100%;
+    --contact-email: 245 58% 51%;
+    --contact-email-foreground: 0 0% 100%;
   }
 
   .dark {

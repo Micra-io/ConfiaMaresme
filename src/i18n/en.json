@@ -36,6 +36,15 @@
     "unlocking": "Unlocking...",
     "contactWhatsApp": "Contact via WhatsApp"
   },
+  "contact": {
+    "whatsapp": "WhatsApp",
+    "call": "Call",
+    "sms": "SMS",
+    "email": "Email",
+    "callFallback": "Or call instead",
+    "unavailable": "Contact info temporarily unavailable",
+    "unavailableUnlock": "We're updating this tradesman's contact info. Please check back later."
+  },
   "profile": {
     "notFound": "Professional not found.",
     "backToDirectory": "Back to directory",
