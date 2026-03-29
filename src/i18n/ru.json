@@ -36,6 +36,15 @@
     "unlocking": "Открываем...",
     "contactWhatsApp": "Связаться через WhatsApp"
   },
+  "contact": {
+    "whatsapp": "WhatsApp",
+    "call": "Позвонить",
+    "sms": "SMS",
+    "email": "Email",
+    "callFallback": "Или позвоните напрямую",
+    "unavailable": "Контактная информация временно недоступна",
+    "unavailableUnlock": "Мы обновляем контактную информацию этого специалиста. Пожалуйста, проверьте позже."
+  },
   "profile": {
     "notFound": "Специалист не найден.",
     "backToDirectory": "Назад в каталог",
