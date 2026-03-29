@@ -181,7 +181,7 @@ const Navbar = () => {
               <Link to="/" onClick={() => setMobileOpen(false)} className="text-base font-medium">{t('nav.directory')}</Link>
             )}
             {showDashboard && (
-              <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="text-sm font-medium">{dashboardLabel}</Link>
+              <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="text-base font-medium">{dashboardLabel}</Link>
             )}
             {showAdmin && (
               <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-1.5 text-sm font-medium">
