@@ -48,8 +48,8 @@ const Admin = () => {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Active Listings</CardTitle>
-            <Wrench className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-base font-medium text-muted-foreground">Active Listings</CardTitle>
+            <Wrench className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-bold">{stats.listings}</p>
