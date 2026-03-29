@@ -199,7 +199,7 @@ const Navbar = () => {
                 <button onClick={() => { handleSignOut(); setMobileOpen(false); }} className="text-left text-base font-medium text-destructive">{t('nav.signOut')}</button>
               </>
             ) : (
-              <Link to="/auth" onClick={() => setMobileOpen(false)} className="text-sm font-medium text-primary">{t('nav.signIn')}</Link>
+              <Link to="/auth" onClick={() => setMobileOpen(false)} className="text-base font-medium text-primary">{t('nav.signIn')}</Link>
             )}
           </div>
         </div>

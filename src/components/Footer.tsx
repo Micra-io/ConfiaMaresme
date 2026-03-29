@@ -20,7 +20,7 @@ const Footer = () => {
             <Link to="/claim" className="hover:text-foreground transition-colors">{t('claim.title')}</Link>
           </div>
         </div>
-        <p className="mt-6 text-center text-xs text-muted-foreground">
+        <p className="mt-6 text-center text-sm text-muted-foreground">
           © {new Date().getFullYear()} ConfiaMaresme. {t('footer.rights')}
         </p>
       </div>

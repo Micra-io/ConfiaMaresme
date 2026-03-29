@@ -77,9 +77,9 @@ const Dashboard = () => {
       <div className="flex w-full min-h-[calc(100vh-4rem)]">
         <DashboardSidebar active={activeTab} onSelect={setActiveTab} />
         <div className="flex-1 flex flex-col">
-          <header className="h-12 flex items-center border-b px-4">
+          <header className="h-14 flex items-center border-b px-4">
             <SidebarTrigger className="mr-3" />
-            <h1 className="font-display text-lg font-bold">{t('dashboard.title')}</h1>
+            <h1 className="font-display text-xl font-bold">{t('dashboard.title')}</h1>
           </header>
           <main className="flex-1 p-4 sm:p-6 max-w-3xl w-full">
             {activeTab === 'profile' && <DashboardProfileEditor />}
