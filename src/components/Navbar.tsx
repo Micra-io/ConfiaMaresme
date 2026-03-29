@@ -118,10 +118,10 @@ const Navbar = () => {
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-52">
                 <div className="px-2 py-1.5">
-                  <p className="truncate text-sm font-medium">{user.email}</p>
-                  <p className="text-xs text-muted-foreground capitalize">{effectiveRole || 'user'}</p>
+                  <p className="truncate text-base font-medium">{user.email}</p>
+                  <p className="text-sm text-muted-foreground capitalize">{effectiveRole || 'user'}</p>
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => navigate('/dashboard')}>
