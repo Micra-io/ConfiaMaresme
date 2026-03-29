@@ -50,7 +50,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const currentLang = UI_LANGUAGES.find((l) => l.code === i18n.language) || UI_LANGUAGES[0];
+  
   const initials = user?.email?.substring(0, 2).toUpperCase() || '?';
 
   const handleSignOut = async () => {
