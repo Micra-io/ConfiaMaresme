@@ -12,7 +12,7 @@ const Footer = () => {
             <p className="font-display text-xl font-semibold text-foreground">
               Confia<span className="text-secondary">Maresme</span>
             </p>
-            <p className="mt-1 text-sm text-muted-foreground">{t('footer.tagline')}</p>
+            <p className="mt-1 text-base text-muted-foreground">{t('footer.tagline')}</p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
             <Link to="/" className="hover:text-foreground transition-colors">{t('nav.directory')}</Link>
