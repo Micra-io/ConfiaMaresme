@@ -148,7 +148,7 @@ const Navbar = () => {
 
         {/* Mobile toggle */}
         <div className="flex items-center gap-2 md:hidden">
-          <LanguagePills />
+          <LanguageDropdown />
           <button onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
