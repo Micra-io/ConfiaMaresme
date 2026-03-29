@@ -10,6 +10,8 @@ import {
   Unlock, Star, Heart, Settings, MessageCircle,
   MapPin, User, Clock, Trash2,
 } from 'lucide-react';
+import WhatsAppVerificationBanner from '@/components/WhatsAppVerificationBanner';
+import WhatsAppSettingsSection from '@/components/WhatsAppSettingsSection';
 import { formatDistanceToNow } from 'date-fns';
 import { es, ca, enUS, ru } from 'date-fns/locale';
 import { toast } from 'sonner';
