@@ -106,7 +106,7 @@ const Navbar = () => {
             </Link>
           )}
 
-          <LanguagePills />
+          <LanguageDropdown />
 
           {user ? (
             <DropdownMenu>
