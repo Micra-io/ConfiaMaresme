@@ -125,6 +125,8 @@ const ResidentDashboard = () => {
         <p className="text-base text-muted-foreground">{user?.email}</p>
       </div>
 
+      <WhatsAppVerificationBanner />
+
       {/* Unlocked Contacts */}
       <section>
         <div className="flex items-center gap-2 mb-4">
