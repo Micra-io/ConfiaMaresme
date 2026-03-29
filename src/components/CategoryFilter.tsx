@@ -37,9 +37,9 @@ const CategoryFilter = ({ selected, onSelect }: CategoryFilterProps) => {
             <Button
               key={cat.value}
               variant={selected === cat.value ? 'default' : 'outline'}
-              size="sm"
+              size="default"
               onClick={() => onSelect(cat.value === selected ? null : cat.value)}
-              className="gap-1.5 shrink-0"
+              className="gap-2 shrink-0"
             >
               {Icon && <Icon className="h-3.5 w-3.5" />}
               {t(`categories.${cat.value}`)}
