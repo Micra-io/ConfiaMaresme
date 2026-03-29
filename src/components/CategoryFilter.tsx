@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { 
   Zap, Droplets, Hammer, Paintbrush, Wrench, KeyRound, 
-  TreePine, Sparkles, BrickWall, Home, Wind, MoreHorizontal 
+  TreePine, Sparkles, BrickWall, Home, Wind, Dumbbell, UtensilsCrossed, MoreHorizontal 
 } from 'lucide-react';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Zap, Droplets, Hammer, Paintbrush, Wrench, KeyRound,
-  TreePine, Sparkles, BrickWall, Home, Wind, MoreHorizontal,
+  TreePine, Sparkles, BrickWall, Home, Wind, Dumbbell, UtensilsCrossed, MoreHorizontal,
 };
 
 interface CategoryFilterProps {
