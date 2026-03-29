@@ -220,8 +220,13 @@ export type Database = {
       tradesmen: {
         Row: {
           additional_categories: string[]
+          admin_notes: string | null
+          alternate_contact: string | null
           bio: string | null
+          contact_method: string
           created_at: string
+          data_completeness_score: number
+          data_source: string
           full_name: string
           id: string
           is_available: boolean
@@ -229,6 +234,9 @@ export type Database = {
           is_featured: boolean
           languages: string[]
           location: string | null
+          location_verified: boolean
+          municipality: string | null
+          needs_review: boolean
           phone_verified: boolean
           profile_image_url: string | null
           services: string[] | null
@@ -238,12 +246,19 @@ export type Database = {
           user_id: string | null
           vetted_by_community: boolean
           view_count: number
+          whatsapp_checked_at: string | null
           whatsapp_number: string | null
+          whatsapp_reachable: string
         }
         Insert: {
           additional_categories?: string[]
+          admin_notes?: string | null
+          alternate_contact?: string | null
           bio?: string | null
+          contact_method?: string
           created_at?: string
+          data_completeness_score?: number
+          data_source?: string
           full_name: string
           id?: string
           is_available?: boolean
@@ -251,6 +266,9 @@ export type Database = {
           is_featured?: boolean
           languages?: string[]
           location?: string | null
+          location_verified?: boolean
+          municipality?: string | null
+          needs_review?: boolean
           phone_verified?: boolean
           profile_image_url?: string | null
           services?: string[] | null
@@ -260,12 +278,19 @@ export type Database = {
           user_id?: string | null
           vetted_by_community?: boolean
           view_count?: number
+          whatsapp_checked_at?: string | null
           whatsapp_number?: string | null
+          whatsapp_reachable?: string
         }
         Update: {
           additional_categories?: string[]
+          admin_notes?: string | null
+          alternate_contact?: string | null
           bio?: string | null
+          contact_method?: string
           created_at?: string
+          data_completeness_score?: number
+          data_source?: string
           full_name?: string
           id?: string
           is_available?: boolean
@@ -273,6 +298,9 @@ export type Database = {
           is_featured?: boolean
           languages?: string[]
           location?: string | null
+          location_verified?: boolean
+          municipality?: string | null
+          needs_review?: boolean
           phone_verified?: boolean
           profile_image_url?: string | null
           services?: string[] | null
@@ -282,7 +310,9 @@ export type Database = {
           user_id?: string | null
           vetted_by_community?: boolean
           view_count?: number
+          whatsapp_checked_at?: string | null
           whatsapp_number?: string | null
+          whatsapp_reachable?: string
         }
         Relationships: []
       }
