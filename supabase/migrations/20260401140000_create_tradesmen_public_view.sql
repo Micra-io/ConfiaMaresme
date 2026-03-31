@@ -1,4 +1,4 @@
-CREATE VIEW public.tradesmen_public AS
+CREATE OR REPLACE VIEW public.tradesmen_public AS
 SELECT
   t.id,
   t.full_name,
@@ -25,3 +25,5 @@ LEFT JOIN (
   FROM public.reviews
   GROUP BY tradesman_id
 ) r ON r.tradesman_id = t.id;
+
+GRANT SELECT ON public.tradesmen_public TO anon, authenticated;
