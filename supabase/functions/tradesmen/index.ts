@@ -31,6 +31,10 @@ Deno.serve(async (req) => {
   // Auth
   const apiKey = req.headers.get("x-api-key");
   const expectedKey = Deno.env.get("GUIDAL_API_KEY");
+  if (!expectedKey) {
+    console.error("[tradesmen] GUIDAL_API_KEY secret is not set");
+    return jsonResponse({ error: "Service misconfigured" }, 503);
+  }
   if (!apiKey || apiKey !== expectedKey) {
     return jsonResponse({ error: "Unauthorized" }, 401);
   }
@@ -68,6 +72,14 @@ Deno.serve(async (req) => {
   if (isNaN(page) || page < 1) {
     return jsonResponse(
       { error: "Invalid parameter", details: "page must be an integer >= 1" },
+      400,
+    );
+  }
+
+  // Validate location length
+  if (location && location.length > 100) {
+    return jsonResponse(
+      { error: "Invalid parameter", details: "location must be <= 100 characters" },
       400,
     );
   }
@@ -125,7 +137,8 @@ Deno.serve(async (req) => {
         total: countResult.count ?? 0,
       },
     });
-  } catch (_err) {
+  } catch (err) {
+    console.error("[tradesmen] unhandled error:", err);
     return jsonResponse({ error: "Internal server error" }, 500);
   }
 });
