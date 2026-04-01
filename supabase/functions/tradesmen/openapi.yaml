@@ -1,0 +1,224 @@
+openapi: 3.1.0
+info:
+  title: ConfiaMaresme Tradesmen API
+  description: Public API for pulling tradesman directory data from ConfiaMaresme.
+  version: 1.0.0
+  contact:
+    name: ConfiaMaresme
+    url: https://confiamaresme.com
+
+servers:
+  - url: https://ihhdazltdyctyygxcblw.supabase.co/functions/v1
+    description: Production
+
+security:
+  - apiKey: []
+
+paths:
+  /tradesmen:
+    get:
+      summary: List tradesmen
+      description: Returns a paginated list of tradesmen with aggregate review ratings. Results are sorted by featured status first, then by average rating descending.
+      operationId: listTradesmen
+      parameters:
+        - name: category
+          in: query
+          required: false
+          schema:
+            $ref: "#/components/schemas/TradeCategory"
+        - name: location
+          in: query
+          description: Case-insensitive substring match against tradesman location.
+          required: false
+          schema:
+            type: string
+            maxLength: 100
+            example: alella
+        - name: available
+          in: query
+          description: Filter by availability.
+          required: false
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        "200":
+          description: Paginated list of tradesmen.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, pagination]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Tradesman"
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+        "400":
+          description: Invalid query parameter.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationError"
+        "401":
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "405":
+          description: Method not allowed (only GET is accepted).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Service misconfigured.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: x-api-key
+
+  schemas:
+    TradeCategory:
+      type: string
+      enum:
+        - electrician
+        - plumber
+        - carpenter
+        - painter
+        - general_handyman
+        - locksmith
+        - gardener
+        - cleaner
+        - mason
+        - roofer
+        - hvac
+        - other
+
+    Tradesman:
+      type: object
+      required:
+        - id
+        - full_name
+        - trade_category
+        - is_available
+        - vetted_by_community
+        - is_featured
+        - subscription_tier
+        - avg_rating
+        - review_count
+      properties:
+        id:
+          type: string
+          format: uuid
+        full_name:
+          type: string
+          example: Carlos Garcia Lopez
+        trade_category:
+          $ref: "#/components/schemas/TradeCategory"
+        additional_categories:
+          type: array
+          items:
+            type: string
+          example: ["general_handyman"]
+        bio:
+          type: string
+          nullable: true
+        location:
+          type: string
+          nullable: true
+          example: "Mataro, Maresme"
+        whatsapp_number:
+          type: string
+          nullable: true
+          example: "+34612345678"
+        profile_image_url:
+          type: string
+          format: uri
+          nullable: true
+        is_available:
+          type: boolean
+        vetted_by_community:
+          type: boolean
+        services:
+          type: array
+          items:
+            type: string
+          nullable: true
+          example: ["Instalaciones", "Reparaciones"]
+        languages:
+          type: array
+          items:
+            type: string
+          example: ["es", "ca"]
+        is_featured:
+          type: boolean
+        subscription_tier:
+          type: string
+          example: free
+        avg_rating:
+          type: number
+          minimum: 0
+          maximum: 5
+          example: 4.3
+        review_count:
+          type: integer
+          minimum: 0
+          example: 7
+
+    Pagination:
+      type: object
+      required: [page, limit, total]
+      properties:
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 20
+        total:
+          type: integer
+          example: 142
+
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+          example: Unauthorized
+
+    ValidationError:
+      type: object
+      required: [error, details]
+      properties:
+        error:
+          type: string
+          example: Invalid parameter
+        details:
+          type: string
+          example: "limit must be 1-100"
