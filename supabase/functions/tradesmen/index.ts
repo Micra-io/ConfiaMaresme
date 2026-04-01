@@ -99,42 +99,27 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    // Build query with filters
-    let countQuery = supabase
+    // Build query — select with count returns both data and total in one request
+    let query = supabase
       .from("tradesmen_public")
-      .select("*", { count: "exact", head: true });
-
-    let dataQuery = supabase
-      .from("tradesmen_public")
-      .select("*")
+      .select("*", { count: "exact" })
       .order("is_featured", { ascending: false })
       .order("avg_rating", { ascending: false })
       .range((page - 1) * limit, page * limit - 1);
 
-    if (category) {
-      countQuery = countQuery.eq("trade_category", category);
-      dataQuery = dataQuery.eq("trade_category", category);
-    }
-    if (location) {
-      countQuery = countQuery.ilike("location", `%${location}%`);
-      dataQuery = dataQuery.ilike("location", `%${location}%`);
-    }
-    if (available !== null) {
-      countQuery = countQuery.eq("is_available", available);
-      dataQuery = dataQuery.eq("is_available", available);
-    }
+    if (category) query = query.eq("trade_category", category);
+    if (location) query = query.ilike("location", `%${location}%`);
+    if (available !== null) query = query.eq("is_available", available);
 
-    const [countResult, dataResult] = await Promise.all([countQuery, dataQuery]);
-
-    if (countResult.error) throw countResult.error;
-    if (dataResult.error) throw dataResult.error;
+    const { data, count, error } = await query;
+    if (error) throw error;
 
     return jsonResponse({
-      data: dataResult.data,
+      data,
       pagination: {
         page,
         limit,
-        total: countResult.count ?? 0,
+        total: count ?? 0,
       },
     });
   } catch (err) {

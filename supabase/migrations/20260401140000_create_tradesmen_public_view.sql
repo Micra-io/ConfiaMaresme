@@ -27,3 +27,10 @@ LEFT JOIN (
 ) r ON r.tradesman_id = t.id;
 
 GRANT SELECT ON public.tradesmen_public TO anon, authenticated;
+
+-- Indexes for Edge Function filter/sort queries
+CREATE INDEX IF NOT EXISTS idx_tradesmen_category_featured
+  ON public.tradesmen (trade_category, is_featured DESC);
+
+CREATE INDEX IF NOT EXISTS idx_tradesmen_available
+  ON public.tradesmen (is_available) WHERE is_available = true;
