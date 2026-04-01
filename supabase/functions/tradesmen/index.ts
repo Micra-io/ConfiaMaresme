@@ -112,7 +112,16 @@ Deno.serve(async (req) => {
     if (available !== null) query = query.eq("is_available", available);
 
     const { data, count, error } = await query;
-    if (error) throw error;
+    if (error) {
+      // Supabase returns a range error when offset exceeds row count — return empty page
+      if (error.code === "PGRST103") {
+        return jsonResponse({
+          data: [],
+          pagination: { page, limit, total: count ?? 0 },
+        });
+      }
+      throw error;
+    }
 
     return jsonResponse({
       data,
